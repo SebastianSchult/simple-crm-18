@@ -1,7 +1,7 @@
 <p>user works!</p>
 
-<button class="add-user-btn" mat-fab color="primary" #tooltip="matTooltip"
-matTooltip="Info about the action"
+<button (click)="openDialog()" class="add-user-btn" mat-fab color="primary" #tooltip="matTooltip"
+matTooltip="add User"
 [matTooltipPosition]="position.value!"
 matTooltipHideDelay="1000">
     <mat-icon>add</mat-icon>
