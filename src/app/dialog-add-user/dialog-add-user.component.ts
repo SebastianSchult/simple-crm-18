@@ -9,7 +9,8 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE
 } from '@angular/material/core';
-
+import { User } from '../../models/user.class';
+import { FormsModule } from '@angular/forms';
 /** @title Basic datepicker */
 export const DE_DATE_FORMATS = {
   parse: {
@@ -36,9 +37,18 @@ export const DE_DATE_FORMATS = {
     MatInputModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    FormsModule
   ],
   templateUrl: './dialog-add-user.component.html',
   styleUrl: './dialog-add-user.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DialogAddUserComponent {}
+export class DialogAddUserComponent {
+  user = new User();
+  birthDate: Date = new Date();
+
+  saveUser() {
+    this.user.birthDate = this.birthDate.getTime();
+    console.log('User saved:', this.user);
+  }
+}
