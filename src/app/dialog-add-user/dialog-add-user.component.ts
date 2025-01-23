@@ -14,7 +14,10 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user.class';
 import { Firestore } from '@angular/fire/firestore';
 import { collection, collectionData, addDoc } from '@angular/fire/firestore';
-
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
+import { MatDialogRef } from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 // Eigener DateAdapter für deutsches Format
@@ -56,23 +59,42 @@ export const DE_DATE_FORMATS = {
     MatFormFieldModule,
     MatDatepickerModule,
     FormsModule,
+    MatProgressBarModule, CommonModule
   ],
   templateUrl: './dialog-add-user.component.html',
   styleUrl: './dialog-add-user.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  
 })
 export class DialogAddUserComponent {
   firestore: Firestore = inject(Firestore);
+  dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
   user = new User();
   birthDate: Date = new Date();
+  loading = false;
+  private _snackBar = inject(MatSnackBar);
 
   saveUser() {
-    this.user.birthDate = this.birthDate.getTime(); // Direkt den Timestamp speichern
+    if (this.loading) return;
+    
+    this.loading = true;
+    this.user.birthDate = this.birthDate.getTime();
     console.log('User saved:', this.user);
+    
     const usersCollection = collection(this.firestore, 'users');
     addDoc(usersCollection, this.user.toJSON())
-    .then((result) => {
-      console.log('User added with ID:', result.id);
-    });
+      .then((result) => {
+        console.log('User added with ID:', result.id);
+        // this.dialogRef.close();
+        this.loading = false;
+        this.user = new User();
+        this.birthDate = new Date();
+        this.openSnackBar();
+      })
+      ;
+      
+  }
+
+  openSnackBar() {
+    this._snackBar.open('User added', 'Close', { duration: 3000 });
   }
 }
