@@ -89,9 +89,9 @@ export class DialogAddUserComponent {
         this.user = new User();
         this.birthDate = new Date();
         this.openSnackBar();
+        this.dialogRef.close();
       })
-      ;
-      
+      ;  
   }
 
   openSnackBar() {
