@@ -11,11 +11,12 @@ import { User } from '../../models/user.class';
 import {MatCardModule} from '@angular/material/card';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule, MatDialogModule, MatCardModule, CommonModule], 
+  imports: [MatButtonModule, MatIconModule, MatTooltipModule, FormsModule, ReactiveFormsModule, MatDialogModule, MatCardModule, CommonModule, RouterModule], 
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
@@ -30,11 +31,9 @@ export class UserComponent implements OnInit{
   ngOnInit(): void {
     const usersCollection = collection(this.firestore, 'users');
     
-    collectionData(usersCollection)
+    collectionData(usersCollection, { idField: 'id' })
       .subscribe((changes: any) => {
         console.log('Changes:', changes);
-        // Wandelt den Firestore-Timestamp in ein Date-Objekt um,
-        // falls das birthDate-Objekt eine "seconds"-Eigenschaft besitzt.
         this.allUsers = changes.map((u: any) => {
           if (u.birthDate && typeof u.birthDate === 'object' && 'seconds' in u.birthDate) {
             u.birthDate = new Date(u.birthDate.seconds * 1000);

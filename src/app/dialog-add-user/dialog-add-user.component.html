@@ -68,10 +68,8 @@
   (click)="dialogRef.close()">Cancel</button>
   <button 
     mat-flat-button 
-    color="primary" 
     [disabled]="loading"
-    (click)="saveUser()"
-    [attr.cdkFocusInitial]="!loading">
+    (click)="saveUser()">
     {{ loading ? 'Saving...' : 'Save' }}
   </button>
 </mat-dialog-actions>
