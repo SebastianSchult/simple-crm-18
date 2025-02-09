@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Firestore, doc, docData } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
+import { User } from '../../models/user.class';
 
 
 @Component({
@@ -12,13 +14,21 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserDetailComponent {
   userID = '';
+  user: User = new User();
 
-  constructor(private route:ActivatedRoute){}
+  constructor(private route:ActivatedRoute, private firestore: Firestore){}
 
   ngOnInit(){
-    // 'bank' is the name of the route parameter
     this.userID = this.route.snapshot.params['id'];
-    console.log( 'User ID:', this.userID);
+    this.getUser();
+}
+
+getUser(){
+  const userDocRef = doc(this.firestore, 'users', this.userID);
+
+  docData(userDocRef).subscribe((user: any) => {
+    this.user = new User(user);
+  });
 }
 
 }
