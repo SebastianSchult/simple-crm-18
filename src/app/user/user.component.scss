@@ -1,16 +1,65 @@
+$padding-left: 16px;
+$cell-height: 60px;
+$border-color: rgba(0, 0, 0, 0.12);
+$text-color: rgba(0, 0, 0, 0.4);
+
+.mat-card {
+  padding: 0;
+}
+
 .add-user-btn {
-    position: absolute;
-    right: 56px;
-    bottom: 56px;
+  position: absolute;
+  right: 56px;
+  bottom: 56px;
+  z-index: 10;
 }
 
 .user-table {
-    width: 100%;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  thead {
+    tr {
+      cursor: unset;
+      &:hover {
+        background-color: unset;
+      }
+    }
+  }
+
+  tr {
+    border-bottom: 1px solid $border-color;
+    &:last-child {
+      border-bottom: none;
+
+    }
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
 
     th {
-        color: rgba(0, 0, 0, 0.4);
-        font-weight: 500;
-        font-size: 14px;
-        text-align: start;
+      border-bottom: 1px solid $border-color;
     }
+   
+  }
+
+  th,
+  td {
+    height: $cell-height;
+    padding-right: 16px;
+
+    &:first-child {
+      padding-left: $padding-left;
+    }
+  }
+
+  th {
+    color: $text-color;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: start;
+  }
 }
