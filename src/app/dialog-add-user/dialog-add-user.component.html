@@ -62,7 +62,10 @@
   <div></div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button [disabled]="loading" mat-flat-button>Cancel</button>
+  <button 
+  [disabled]="loading" 
+  mat-flat-button
+  (click)="dialogRef.close()">Cancel</button>
   <button 
     mat-flat-button 
     color="primary" 
