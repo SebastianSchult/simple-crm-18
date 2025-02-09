@@ -4,24 +4,21 @@
       <tr>
         <th>Name</th>
         <th>Email</th>
-        <th>Birth Date</th>
+        <th>Stadt</th>
+        <th>Geburtsdatum</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>UserName</td>
-        <td>UserEmail</td>
-        <td>UserBirth Date</td>
+      <tr *ngFor="let user of allUsers">
+        <td>{{ user.firstName}} {{ user.lastName }} </td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.city }}</td>
+        <td>{{ user.birthDate | date:'dd.MM.yyyy' }}</td>
       </tr>
-      <tr>
-        <td>UserName</td>
-        <td>UserEmail</td>
-        <td>UserBirth Date</td>
-      </tr>
+     
     </tbody>
   </table>
 </mat-card>
-
 
 <button
   (click)="openDialog()"
