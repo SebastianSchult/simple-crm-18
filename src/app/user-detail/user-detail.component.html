@@ -4,7 +4,7 @@
   </button>
   <mat-menu #userMenu="matMenu">
     <button mat-menu-item (click)="editUserDetail()">Edit</button>
-    <button mat-menu-item>Delete</button>
+    <button mat-menu-item (click)="delete()">Delete</button>
   </mat-menu>
   <img src="img/user-profile-img.png" alt="" />
   <div class="user-details">
@@ -20,7 +20,7 @@
   </button>
   <mat-menu #addressMenu="matMenu">
     <button mat-menu-item (click)="editAddressMenu()">Edit</button>
-    <button mat-menu-item>Delete</button>
+    <button mat-menu-item (click)="delete()">Delete</button>
   </mat-menu>
   <mat-card-header>
     <mat-card-title>Address</mat-card-title>

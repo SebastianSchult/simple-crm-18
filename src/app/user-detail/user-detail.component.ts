@@ -1,8 +1,8 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component } from '@angular/core';
-import { Firestore, doc, docData } from '@angular/fire/firestore';
+import { Firestore, doc, docData, deleteDoc } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { User } from '../../models/user.class';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,7 +15,7 @@ import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.co
   standalone: true,
   imports: [MatCardModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.scss'] // Achte darauf: styleUrls (Plural)
+  styleUrls: ['./user-detail.component.scss'] 
 })
 export class UserDetailComponent {
   userID = '';
@@ -24,7 +24,8 @@ export class UserDetailComponent {
   constructor(
     private route: ActivatedRoute,
     private firestore: Firestore,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router 
   ) {}
 
   ngOnInit() {
@@ -41,17 +42,13 @@ export class UserDetailComponent {
 
   editUserDetail() {
     const dialog = this.dialog.open(DialogEditUserComponent);
-    // Falls du im Edit-User-Dialog ebenfalls eine Kopie benötigst,
-    // kannst du hier analog vorgehen:
     dialog.componentInstance.user = this.user;
   }
 
   editAddressMenu() {
-    // Erstelle eine Kopie des User-Objekts inklusive ID,
-    // damit Änderungen im Dialog nicht sofort das Original beeinflussen.
     const userCopy = new User({
       ...this.user.toJSON(),
-      id: this.user.id  // explizit die ID übernehmen
+      id: this.user.id 
     });
     
     const dialogRef = this.dialog.open(DialogEditAddressComponent, {
@@ -59,11 +56,31 @@ export class UserDetailComponent {
     });
 
     dialogRef.afterClosed().subscribe((result: User | undefined) => {
-      // Wird der Dialog mit einem Ergebnis geschlossen (Save geklickt),
-      // aktualisiere das Original.
       if (result) {
         this.user = result;
       }
     });
+  }
+
+  delete() {
+    // Optional: Bestätigung einholen
+    if (!confirm('Möchten Sie diesen User wirklich löschen?')) {
+      return;
+    }
+
+    if (!this.userID) {
+      console.error('Keine User-ID vorhanden, Löschung nicht möglich.');
+      return;
+    }
+
+    const userDocRef = doc(this.firestore, 'users', this.userID);
+    deleteDoc(userDocRef)
+      .then(() => {
+        console.log('User successfully deleted.');
+        this.router.navigate(['/user']);
+      })
+      .catch((error) => {
+        console.error('Error deleting user:', error);
+      });
   }
 }
