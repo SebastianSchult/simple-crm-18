@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.class';
 import { MatButtonModule } from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-address.component';
 import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
@@ -39,12 +39,12 @@ getUser(){
 
 editUserDetail(){
   const dialog = this.dialog.open(DialogEditUserComponent);
-  dialog.componentInstance.user = this.user;
+  dialog.componentInstance.user = new User(this.user.toJSON());
 }
 
 editAddressMenu(){
   const dialog = this.dialog.open(DialogEditAddressComponent);
-  dialog.componentInstance.user = this.user;
+  dialog.componentInstance.user = new User(this.user.toJSON());
 }
 
 }
