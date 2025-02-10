@@ -44,8 +44,6 @@ export class UserComponent implements OnInit{
   }
 
   openDialog() : void {
-    this.dialog.open(DialogAddUserComponent, {
-      
-    });
+    this.dialog.open(DialogAddUserComponent);
   }
 }

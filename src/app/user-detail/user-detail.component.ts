@@ -6,6 +6,9 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.class';
 import { MatButtonModule } from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-address.component';
+import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.component';
 
 @Component({
   selector: 'app-user-detail',
@@ -19,7 +22,7 @@ export class UserDetailComponent {
   userID = '';
   user: User = new User();
 
-  constructor(private route:ActivatedRoute, private firestore: Firestore){}
+  constructor(private route:ActivatedRoute, private firestore: Firestore, public dialog: MatDialog){}
 
   ngOnInit(){
     this.userID = this.route.snapshot.params['id'];
@@ -34,8 +37,12 @@ getUser(){
   });
 }
 
-editUserDetail(){}
+editUserDetail(){
+  this.dialog.open(DialogEditUserComponent);
+}
 
-editMenu(){}
+editAddressMenu(){
+  this.dialog.open(DialogEditAddressComponent);
+}
 
 }

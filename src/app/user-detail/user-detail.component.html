@@ -3,7 +3,7 @@
     <mat-icon >more_vert</mat-icon>
   </button>
   <mat-menu #userMenu="matMenu">
-    <button mat-menu-item onclick="editUserDetail()">Edit</button>
+    <button mat-menu-item (click)="editUserDetail()">Edit</button>
     <button mat-menu-item>Delete</button>
   </mat-menu>
   <img src="img/user-profile-img.png" alt="" />
@@ -19,7 +19,7 @@
     <mat-icon >more_vert</mat-icon>
   </button>
   <mat-menu #addressMenu="matMenu">
-    <button mat-menu-item onclick="editMenu()">Edit</button>
+    <button mat-menu-item (click)="editAddressMenu()">Edit</button>
     <button mat-menu-item>Delete</button>
   </mat-menu>
   <mat-card-header>
