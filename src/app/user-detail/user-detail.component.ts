@@ -5,12 +5,13 @@ import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.class';
 import { MatButtonModule } from '@angular/material/button';
-
+import {MatMenuModule} from '@angular/material/menu';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, MatMenuModule
+  ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss'
 })
@@ -32,5 +33,9 @@ getUser(){
     this.user = new User(user);
   });
 }
+
+editUserDetail(){}
+
+editMenu(){}
 
 }
