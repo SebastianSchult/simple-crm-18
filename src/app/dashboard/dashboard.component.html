@@ -1,1 +1,24 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+    <mat-card class="metric-card">
+      <mat-card-title>Total Users</mat-card-title>
+      <mat-card-content>
+        <h2>{{ totalUsers }}</h2>
+        <p>Registered users</p>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card class="metric-card">
+        <mat-card-title>Current Date</mat-card-title>
+        <mat-card-content>
+          <h2>{{ currentDate | date:'fullDate' }}</h2>
+        </mat-card-content>
+      </mat-card>
+  
+      <mat-card class="metric-card">
+        <mat-card-title>Current Time</mat-card-title>
+        <mat-card-content>
+          <!-- Hier wird die Uhrzeit im Format HH:mm:ss angezeigt -->
+          <h2>{{ currentDate | date:'HH:mm:ss' }}</h2>
+        </mat-card-content>
+      </mat-card>
+  </div>
