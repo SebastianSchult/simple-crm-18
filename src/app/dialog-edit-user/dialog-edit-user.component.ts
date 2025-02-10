@@ -8,6 +8,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { User } from '../../models/user.class';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -18,9 +20,41 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dialog-edit-user.component.scss'
 })
 export class DialogEditUserComponent {
+  firestore: Firestore = inject(Firestore);
   user!: User;
     loading = false;
     dialogRef = inject(MatDialogRef<DialogEditUserComponent>);
+    private _snackBar = inject(MatSnackBar);
   
-    saveUser(){}
-}
+      saveUser() {
+        if (this.loading) return;
+        this.loading = true;
+        console.log('User to update:', this.user);
+    
+        if (!this.user.id) {
+          console.error('User hat keine ID, Update nicht möglich.');
+          this.loading = false;
+          return;
+        }
+        
+        const userDocRef = doc(this.firestore, 'users', this.user.id);
+        
+        updateDoc(userDocRef, this.user.toJSON())
+          .then(() => {
+            console.log('User updated successfully.');
+            this.loading = false;
+            this.openSnackBar();
+            // Schließe den Dialog und gebe das bearbeitete User-Objekt zurück.
+            this.dialogRef.close(this.user);
+          })
+          .catch((error) => {
+            console.error('Error updating user:', error);
+            this.loading = false;
+          });
+      }
+      
+      openSnackBar() {
+        this._snackBar.open('User edited', 'Close', { duration: 3000 });
+      }
+    }
+

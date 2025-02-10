@@ -1,4 +1,5 @@
 export class User {
+    id?: string;
     firstName: string;
     lastName: string;
     birthDate: number;
@@ -9,6 +10,7 @@ export class User {
     email: string;
 
     constructor(obj?: any) {
+        this.id = obj && obj.id ? obj.id : undefined;
         this.firstName = obj ? obj.firstName : '';
         this.lastName = obj ? obj.lastName : '';
         this.birthDate = obj ? obj.birthDate : 0;

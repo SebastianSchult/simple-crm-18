@@ -13,38 +13,57 @@ import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.co
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, MatButtonModule, MatMenuModule
-  ],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './user-detail.component.html',
-  styleUrl: './user-detail.component.scss'
+  styleUrls: ['./user-detail.component.scss'] // Achte darauf: styleUrls (Plural)
 })
 export class UserDetailComponent {
   userID = '';
   user: User = new User();
 
-  constructor(private route:ActivatedRoute, private firestore: Firestore, public dialog: MatDialog){}
+  constructor(
+    private route: ActivatedRoute,
+    private firestore: Firestore,
+    public dialog: MatDialog
+  ) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.userID = this.route.snapshot.params['id'];
     this.getUser();
-}
+  }
 
-getUser(){
-  const userDocRef = doc(this.firestore, 'users', this.userID);
+  getUser() {
+    const userDocRef = doc(this.firestore, 'users', this.userID);
+    docData(userDocRef, { idField: 'id' }).subscribe((user: any) => {
+      this.user = new User(user);
+    });
+  }
 
-  docData(userDocRef).subscribe((user: any) => {
-    this.user = new User(user);
-  });
-}
+  editUserDetail() {
+    const dialog = this.dialog.open(DialogEditUserComponent);
+    // Falls du im Edit-User-Dialog ebenfalls eine Kopie benötigst,
+    // kannst du hier analog vorgehen:
+    dialog.componentInstance.user = this.user;
+  }
 
-editUserDetail(){
-  const dialog = this.dialog.open(DialogEditUserComponent);
-  dialog.componentInstance.user = new User(this.user.toJSON());
-}
+  editAddressMenu() {
+    // Erstelle eine Kopie des User-Objekts inklusive ID,
+    // damit Änderungen im Dialog nicht sofort das Original beeinflussen.
+    const userCopy = new User({
+      ...this.user.toJSON(),
+      id: this.user.id  // explizit die ID übernehmen
+    });
+    
+    const dialogRef = this.dialog.open(DialogEditAddressComponent, {
+      data: { user: userCopy }
+    });
 
-editAddressMenu(){
-  const dialog = this.dialog.open(DialogEditAddressComponent);
-  dialog.componentInstance.user = new User(this.user.toJSON());
-}
-
+    dialogRef.afterClosed().subscribe((result: User | undefined) => {
+      // Wird der Dialog mit einem Ergebnis geschlossen (Save geklickt),
+      // aktualisiere das Original.
+      if (result) {
+        this.user = result;
+      }
+    });
+  }
 }

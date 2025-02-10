@@ -32,14 +32,14 @@ export class UserComponent implements OnInit{
     const usersCollection = collection(this.firestore, 'users');
     
     collectionData(usersCollection, { idField: 'id' })
-      .subscribe((changes: any) => {
-        console.log('Changes:', changes);
-        this.allUsers = changes.map((u: any) => {
-          if (u.birthDate && typeof u.birthDate === 'object' && 'seconds' in u.birthDate) {
-            u.birthDate = new Date(u.birthDate.seconds * 1000);
-          }
-          return u;
-        });
+  .subscribe((changes: any) => {
+    console.log('Changes:', changes);
+    this.allUsers = changes.map((u: any) => {
+      if (u.birthDate && typeof u.birthDate === 'object' && 'seconds' in u.birthDate) {
+        u.birthDate = new Date(u.birthDate.seconds * 1000);
+      }
+      return u;
+    });
       });
   }
 
