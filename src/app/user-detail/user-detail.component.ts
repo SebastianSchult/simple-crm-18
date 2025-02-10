@@ -1,14 +1,16 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component } from '@angular/core';
 import { Firestore, doc, docData } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.class';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [MatCardModule, MatIconModule, MatButtonModule],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss'
 })
