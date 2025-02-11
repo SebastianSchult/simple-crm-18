@@ -1,23 +1,24 @@
 <mat-card appearance="outlined">
-  <table class="user-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Stadt</th>
-        <th>Geburtsdatum</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of allUsers" [routerLink]="'/user/' + user.id" >
-        <td>{{ user.firstName}} {{ user.lastName }} </td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.city }}</td>
-        <td>{{ user.birthDate | date:'dd.MM.yyyy' }}</td>
-      </tr>
-     
-    </tbody>
-  </table>
+  <div class="table-wrapper">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Stadt</th>
+          <th>Geburtsdatum</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of allUsers" [routerLink]="'/user/' + user.id">
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.city }}</td>
+          <td>{{ user.birthDate | date:'dd.MM.yyyy' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </mat-card>
 
 <button
