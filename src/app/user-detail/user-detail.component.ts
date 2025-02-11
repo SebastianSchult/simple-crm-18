@@ -41,8 +41,20 @@ export class UserDetailComponent {
   }
 
   editUserDetail() {
-    const dialog = this.dialog.open(DialogEditUserComponent);
-    dialog.componentInstance.user = this.user;
+    const userCopy = new User({
+      ...this.user.toJSON(),
+      id: this.user.id
+    });
+    
+    const dialogRef = this.dialog.open(DialogEditUserComponent, {
+      data: { user: userCopy }
+    });
+    
+    dialogRef.afterClosed().subscribe((result: User | undefined) => {
+      if (result) {
+        this.user = result;
+      }
+    });
   }
 
   editAddressMenu() {

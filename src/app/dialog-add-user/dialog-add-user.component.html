@@ -1,76 +1,182 @@
 <div class="dialog-container">
-<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-<h2 mat-dialog-title>Add User</h2>
-<mat-dialog-content>
-  <div class="name-container">
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>First Name</mat-label>
-      <input [disabled]="loading" matInput placeholder="First Name" [(ngModel)]="user.firstName" />
-      <!-- <mat-hint>Please enter a name</mat-hint> -->
-    </mat-form-field>
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  <h2 mat-dialog-title>Add User</h2>
+  <!-- Formular einbetten -->
+  <form #userForm="ngForm" (ngSubmit)="saveUser()">
+    <mat-dialog-content>
+      <div class="name-container">
+        <!-- First Name: nur Buchstaben (inklusive deutscher Umlaute, ß, Leerzeichen und Bindestriche) -->
+        <mat-form-field class="mr-16" appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input
+            [disabled]="loading"
+            matInput
+            placeholder="First Name"
+            [(ngModel)]="user.firstName"
+            name="firstName"
+            required
+            pattern="^[A-Za-zäöüÄÖÜß\s-]+$"
+          />
+          <mat-error *ngIf="userForm?.controls?.['firstName']?.errors?.['required'] && userForm?.controls?.['firstName']?.touched">
+            First name is required.
+          </mat-error>
+          <mat-error *ngIf="userForm?.controls?.['firstName']?.errors?.['pattern'] && userForm?.controls?.['firstName']?.touched">
+            Only letters, spaces or hyphens are allowed.
+          </mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Last Name</mat-label>
-      <input [disabled]="loading" matInput placeholder="Last Name" [(ngModel)]="user.lastName" />
-      <!-- <mat-hint>Please enter a last name</mat-hint> -->
-    </mat-form-field>
-  </div>
+        <!-- Last Name: ähnlich wie First Name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input
+            [disabled]="loading"
+            matInput
+            placeholder="Last Name"
+            [(ngModel)]="user.lastName"
+            name="lastName"
+            required
+            pattern="^[A-Za-zäöüÄÖÜß\s-]+$"
+          />
+          <mat-error *ngIf="userForm?.controls?.['lastName']?.errors?.['required'] && userForm?.controls?.['lastName']?.touched">
+            Last name is required.
+          </mat-error>
+          <mat-error *ngIf="userForm?.controls?.['lastName']?.errors?.['pattern'] && userForm?.controls?.['lastName']?.touched">
+            Only letters, spaces or hyphens are allowed.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-  <div>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Birth Date</mat-label>
-      <input [disabled]="loading" matInput [matDatepicker]="picker" [(ngModel)]="birthDate" />
-      <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-  </div>
+      <!-- Birth Date mit Datepicker -->
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Birth Date</mat-label>
+          <input
+            [disabled]="loading"
+            matInput
+            [matDatepicker]="picker"
+            placeholder="Birth Date"
+            [(ngModel)]="birthDate"
+            name="birthDate"
+            required
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="userForm?.controls?.['birthDate']?.errors?.['required'] && userForm?.controls?.['birthDate']?.touched">
+            Birth date is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>E-Mail</mat-label>
-    <input [disabled]="loading" matInput placeholder="E-Mail" [(ngModel)]="user.email" />
-    <!-- <mat-hint>Please enter a last name</mat-hint> -->
-  </mat-form-field>
+      <!-- E-Mail mit eingebautem Email-Validator -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>E-Mail</mat-label>
+        <input
+          [disabled]="loading"
+          matInput
+          placeholder="E-Mail"
+          [(ngModel)]="user.email"
+          name="email"
+          required
+          email
+        />
+        <mat-error *ngIf="userForm?.controls?.['email']?.errors?.['required'] && userForm?.controls?.['email']?.touched">
+          Email is required.
+        </mat-error>
+        <mat-error *ngIf="userForm?.controls?.['email']?.errors?.['email'] && userForm?.controls?.['email']?.touched">
+          Please enter a valid email.
+        </mat-error>
+      </mat-form-field>
 
-  <div>
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Street</mat-label>
-      <input [disabled]="loading" matInput placeholder="Street" [(ngModel)]="user.street" />
-      <!-- <mat-hint>Please enter a street</mat-hint> -->
-    </mat-form-field>
+      <!-- Optional: Telefonnummer (nur Zahlen) -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input
+          [disabled]="loading"
+          matInput
+          placeholder="Phone Number"
+          [(ngModel)]="user.phone"
+          name="phone"
+          required
+          pattern="^[0-9]+$"
+        />
+        <mat-error *ngIf="userForm?.controls?.['phone']?.errors?.['required'] && userForm?.controls?.['phone']?.touched">
+          Phone number is required.
+        </mat-error>
+        <mat-error *ngIf="userForm?.controls?.['phone']?.errors?.['pattern'] && userForm?.controls?.['phone']?.touched">
+          Only numbers are allowed.
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Streetnumber</mat-label>
-      <input [disabled]="loading" matInput placeholder="Streetnumber" [(ngModel)]="user.streetnumber" />
-      <!-- <mat-hint>Please enter a streetnumber</mat-hint> -->
-    </mat-form-field>
-  </div>
-  <mat-form-field class="mr-16" appearance="outline">
-    <mat-label>Zip Code</mat-label>
-    <input [disabled]="loading" matInput placeholder="Zip Code" [(ngModel)]="user.zipCode" />
-    <!-- <mat-hint>Please enter a zip code</mat-hint> -->
-  </mat-form-field>
+      <!-- Street und Streetnumber -->
+      <div>
+        <mat-form-field class="mr-16" appearance="outline">
+          <mat-label>Street</mat-label>
+          <input
+            [disabled]="loading"
+            matInput
+            placeholder="Street"
+            [(ngModel)]="user.street"
+            name="street"
+            required
+          />
+          <mat-error *ngIf="userForm?.controls?.['street']?.errors?.['required'] && userForm?.controls?.['street']?.touched">
+            Street is required.
+          </mat-error>
+        </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>City</mat-label>
-    <input [disabled]="loading" matInput placeholder="City" [(ngModel)]="user.city" />
-    <!-- <mat-hint>Please enter a city</mat-hint> -->
-  </mat-form-field>
-  <div></div>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button 
-  [disabled]="loading" 
-  mat-flat-button
-  (click)="dialogRef.close()">Cancel</button>
-  <button 
-    mat-flat-button 
-    [disabled]="loading"
-    (click)="saveUser()">
-    {{ loading ? 'Saving...' : 'Save' }}
-  </button>
-</mat-dialog-actions>
+        <mat-form-field appearance="outline">
+          <mat-label>Streetnumber</mat-label>
+          <input
+            [disabled]="loading"
+            matInput
+            placeholder="Streetnumber"
+            [(ngModel)]="user.streetnumber"
+            name="streetnumber"
+            required
+          />
+          <mat-error *ngIf="userForm?.controls?.['streetnumber']?.errors?.['required'] && userForm?.controls?.['streetnumber']?.touched">
+            Streetnumber is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Zip Code -->
+      <mat-form-field class="mr-16" appearance="outline">
+        <mat-label>Zip Code</mat-label>
+        <input
+          [disabled]="loading"
+          matInput
+          placeholder="Zip Code"
+          [(ngModel)]="user.zipCode"
+          name="zipCode"
+          required
+        />
+        <mat-error *ngIf="userForm?.controls?.['zipCode']?.errors?.['required'] && userForm?.controls?.['zipCode']?.touched">
+          Zip code is required.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- City -->
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input
+          [disabled]="loading"
+          matInput
+          placeholder="City"
+          [(ngModel)]="user.city"
+          name="city"
+          required
+        />
+        <mat-error *ngIf="userForm?.controls?.['city']?.errors?.['required'] && userForm?.controls?.['city']?.touched">
+          City is required.
+        </mat-error>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button type="button" [disabled]="loading" mat-flat-button (click)="dialogRef.close()">Cancel</button>
+      <button type="submit" mat-flat-button [disabled]="loading || userForm.invalid">
+        {{ loading ? 'Saving...' : 'Save' }}
+      </button>
+    </mat-dialog-actions>
+  </form>
 </div>

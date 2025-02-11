@@ -1,50 +1,49 @@
 <div class="dialog-container">
-    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-    <h2 mat-dialog-title>Edit address</h2>
-    <mat-dialog-content>
-      <div class="name-container">
-        <div>
-          <mat-form-field class="mr-16" appearance="outline">
-            <mat-label>First name</mat-label>
-            <input
-              [disabled]="loading"
-              matInput
-              placeholder="Street"
-              [(ngModel)]="user.firstName"
-            />
-            <!-- <mat-hint>Please enter a street</mat-hint> -->
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline">
-            <mat-label>Last Name</mat-label>
-            <input
-              [disabled]="loading"
-              matInput
-              placeholder="Streetnumber"
-              [(ngModel)]="user.lastName"
-            />
-            <!-- <mat-hint>Please enter a streetnumber</mat-hint> -->
-          </mat-form-field>
-        </div>
-        <mat-form-field class="mr-16" appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  <h2 mat-dialog-title>Edit user</h2>
+  <mat-dialog-content>
+    <div class="name-container">
+      <div>
+        <mat-form-field class="mr-16" appearance="outline">
+          <mat-label>First name</mat-label>
           <input
             [disabled]="loading"
             matInput
-            placeholder="Zip Code"
-            [(ngModel)]="user.email"
+            placeholder="First name"
+            [(ngModel)]="user.firstName"
           />
-          <!-- <mat-hint>Please enter a zip code</mat-hint> -->
+          <!-- <mat-hint>Please enter a street</mat-hint> -->
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input
+            [disabled]="loading"
+            matInput
+            placeholder="Last name"
+            [(ngModel)]="user.lastName"
+          />
+          <!-- <mat-hint>Please enter a streetnumber</mat-hint> -->
         </mat-form-field>
       </div>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button [disabled]="loading" mat-flat-button (click)="dialogRef.close()">
-        Cancel
-      </button>
-      <button mat-flat-button [disabled]="loading" (click)="saveUser()">
-        {{ loading ? "Saving..." : "Save" }}
-      </button>
-    </mat-dialog-actions>
-  </div>
-  
+      <mat-form-field class="mr-16" appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input
+          [disabled]="loading"
+          matInput
+          placeholder="Email"
+          [(ngModel)]="user.email"
+        />
+        <!-- <mat-hint>Please enter a zip code</mat-hint> -->
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button [disabled]="loading" mat-flat-button (click)="dialogRef.close()">
+      Cancel
+    </button>
+    <button mat-flat-button [disabled]="loading" (click)="saveUser()">
+      {{ loading ? "Saving..." : "Save" }}
+    </button>
+  </mat-dialog-actions>
+</div>

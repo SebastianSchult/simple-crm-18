@@ -8,29 +8,32 @@ export class User {
     zipCode: string;
     city: string;
     email: string;
-
-    constructor(obj?: any) {
-        this.id = obj && obj.id ? obj.id : undefined;
-        this.firstName = obj ? obj.firstName : '';
-        this.lastName = obj ? obj.lastName : '';
-        this.birthDate = obj ? obj.birthDate : 0;
-        this.street = obj ? obj.street : '';
-        this.streetnumber = obj ? obj.streetnumber : '';
-        this.zipCode = obj ? obj.zipCode : '';
-        this.city = obj ? obj.city : '';
-        this.email = obj ? obj.email : '';
+    phone: string; // Neue Eigenschaft für die Telefonnummer
+  
+    constructor(obj?: Partial<User>) {
+      this.id = obj?.id;
+      this.firstName = obj?.firstName || '';
+      this.lastName = obj?.lastName || '';
+      this.birthDate = obj?.birthDate || 0;
+      this.street = obj?.street || '';
+      this.streetnumber = obj?.streetnumber || '';
+      this.zipCode = obj?.zipCode || '';
+      this.city = obj?.city || '';
+      this.email = obj?.email || '';
+      this.phone = obj?.phone || ''; // Standardwert: leerer String
     }
-
+  
     public toJSON() {
-        return {
-            firstName: this.firstName,
-            lastName: this.lastName,
-            birthDate: this.birthDate,
-            street: this.street,
-            streetnumber: this.streetnumber,
-            zipCode: this.zipCode,
-            city: this.city,
-            email: this.email
-        };
+      return {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        birthDate: this.birthDate,
+        street: this.street,
+        streetnumber: this.streetnumber,
+        zipCode: this.zipCode,
+        city: this.city,
+        email: this.email,
+        phone: this.phone // In das JSON wird auch die Telefonnummer übernommen
+      };
     }
-}
+  }
