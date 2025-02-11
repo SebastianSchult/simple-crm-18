@@ -19,3 +19,31 @@ body {
 .full-width {
     width: 100%;
 }
+
+/* Breite der Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  /* Hintergrund (Track) der Scrollbar */
+  ::-webkit-scrollbar-track {
+    background: #ffffff; /* Weiß */
+  }
+  
+  /* Scrollbar-Thumb (der ziehbare Teil) */
+  ::-webkit-scrollbar-thumb {
+    background-color: #1976d2; /* Angular Material Blau */
+    border-radius: 6px;        /* Abgerundete Ecken */
+    border: 3px solid #ffffff; /* Weißer Rahmen um den Thumb */
+  }
+  
+  /* Optional: Thumb beim Hover etwas dunkler */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #1565c0; /* etwas dunkleres Blau */
+  }
+
+  /* Firefox Für alle Elemente (du kannst den Selektor auch einschränken) */
+* {
+    scrollbar-width: thin; /* dünnere Scrollbar */
+    scrollbar-color: #1976d2 #ffffff; /* Erstes ist der Thumb, zweites der Track */
+  }

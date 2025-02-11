@@ -6,6 +6,7 @@ import {MatDrawerContainer, MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import { UserComponent } from './user/user.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -16,4 +17,20 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 })
 export class AppComponent {
   title = 'simple-crm-18';
+  sidenavMode: 'side' | 'over' = 'side';
+  sidenavOpened = true;
+
+  constructor(private breakpointObserver: BreakpointObserver) {}
+
+  ngOnInit(): void {
+    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
+      if (result.matches) {
+        this.sidenavMode = 'over';
+        this.sidenavOpened = false;
+      } else {
+        this.sidenavMode = 'side';
+        this.sidenavOpened = true;
+      }
+    });
+  }
 }
