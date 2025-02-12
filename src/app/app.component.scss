@@ -1,5 +1,5 @@
 .mat-drawer-container {
-    height: 100vh; // Beachte: "vh" statt "vH"
+    height: 100vh;
   }
   
   .sidenav {
@@ -50,10 +50,15 @@
     padding: 16px 56px;
   }
   
+  /* Spacer, um den Logout-Button rechts auszurichten */
+  .spacer {
+    flex: 1 1 auto;
+  }
+  
   /* Responsive Anpassungen */
   @media (max-width: 600px) {
     .sidenav {
-      width: 200px; // Bei kleinen Bildschirmen etwas schmaler
+      width: 200px;
     }
     .router-container {
       padding: 16px;

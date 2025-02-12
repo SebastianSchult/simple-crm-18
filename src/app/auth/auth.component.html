@@ -1,0 +1,53 @@
+<div class="auth-fullscreen">
+    <div class="auth-container">
+      <mat-tab-group>
+        <!-- Login Tab -->
+        <mat-tab label="Login">
+          <form (ngSubmit)="login()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput [formControl]="loginEmail" placeholder="Your email">
+              <mat-error *ngIf="loginEmail.hasError('required')">Email is required</mat-error>
+              <mat-error *ngIf="loginEmail.hasError('email')">Enter a valid email</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput type="password" [formControl]="loginPassword" placeholder="Your password">
+              <mat-error *ngIf="loginPassword.hasError('required')">Password is required</mat-error>
+              <mat-error *ngIf="loginPassword.hasError('minlength')">Minimum 6 characters</mat-error>
+            </mat-form-field>
+            <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+            <button mat-flat-button color="primary" type="submit" [disabled]="loading || loginEmail.invalid || loginPassword.invalid">
+              {{ loading ? 'Please wait...' : 'Login' }}
+            </button>
+          </form>
+        </mat-tab>
+        <!-- Register Tab -->
+        <mat-tab label="Register">
+          <form (ngSubmit)="register()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput [formControl]="registerEmail" placeholder="Your email">
+              <mat-error *ngIf="registerEmail.hasError('required')">Email is required</mat-error>
+              <mat-error *ngIf="registerEmail.hasError('email')">Enter a valid email</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput type="password" [formControl]="registerPassword" placeholder="Your password">
+              <mat-error *ngIf="registerPassword.hasError('required')">Password is required</mat-error>
+              <mat-error *ngIf="registerPassword.hasError('minlength')">Minimum 6 characters</mat-error>
+            </mat-form-field>
+            <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+            <button mat-flat-button color="primary" type="submit" [disabled]="loading || registerEmail.invalid || registerPassword.invalid">
+              {{ loading ? 'Please wait...' : 'Register' }}
+            </button>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+      <div class="guest-access">
+        <button mat-flat-button color="accent" (click)="loginAsGuest()" [disabled]="loading">
+          Continue as Guest
+        </button>
+      </div>
+    </div>
+  </div>

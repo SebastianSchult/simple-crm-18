@@ -1,26 +1,30 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { RouterModule } from '@angular/router';
-import { MatToolbarModule, MatToolbar } from '@angular/material/toolbar';
-import {MatDrawerContainer, MatSidenavModule} from '@angular/material/sidenav';
-import {MatIconModule} from '@angular/material/icon';
-import { UserComponent } from './user/user.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from './services/auth.service'; 
+import { RouterOutlet } from '@angular/router';
+import { MatDrawerContainer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbar, MatToolbarModule, MatSidenavModule, MatDrawerContainer, MatIconModule, RouterModule],
+  imports: [RouterOutlet, MatToolbarModule, MatSidenavModule, MatIconModule, RouterModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'simple-crm-18';
   sidenavMode: 'side' | 'over' = 'side';
   sidenavOpened = true;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
@@ -32,5 +36,16 @@ export class AppComponent {
         this.sidenavOpened = true;
       }
     });
+  }
+
+  logout() {
+    this.authService.logout()
+      .then(() => {
+        // Nach dem Logout zur Login-Seite navigieren (oder Auth-Komponente)
+        this.router.navigate(['/login']);
+      })
+      .catch(error => {
+        console.error('Logout failed:', error);
+      });
   }
 }
