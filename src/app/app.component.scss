@@ -1,66 +1,67 @@
 .mat-drawer-container {
-    height: 100vh;
-  }
-  
-  .sidenav {
-    width: 300px;
-  }
-  
-  .logo {
-    height: 56px;
-    width: 75%;
-  }
-  
-  .logo-container {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  height: 100vh;
+  max-width: 100vw;
+}
+
+.sidenav {
+  width: 300px;
+}
+
+.logo {
+  height: 56px;
+  width: 75%;
+}
+
+.logo-container {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  padding: 0 16px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+mat-toolbar, mat-toolbar-row {
+  min-height: 56px;
+  height: 56px;
+}
+
+.menu-items {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  li {
     padding: 0 16px;
-    min-height: 56px;
+    height: 48px;
     display: flex;
     align-items: center;
-  }
-  
-  mat-toolbar, mat-toolbar-row {
-    min-height: 56px;
-    height: 56px;
-  }
-  
-  .menu-items {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  
-    li {
-      padding: 0 16px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-  
-      mat-icon {
-        margin-right: 16px;
-      }
-  
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
-      }
+    cursor: pointer;
+
+    mat-icon {
+      margin-right: 16px;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
     }
   }
-  
+}
+
+.router-container {
+  padding: 16px 56px;
+}
+
+/* Spacer, um den Logout-Button rechts auszurichten */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 600px) {
+  .sidenav {
+    width: 200px;
+  }
   .router-container {
-    padding: 16px 56px;
+    padding: 16px;
   }
-  
-  /* Spacer, um den Logout-Button rechts auszurichten */
-  .spacer {
-    flex: 1 1 auto;
-  }
-  
-  /* Responsive Anpassungen */
-  @media (max-width: 600px) {
-    .sidenav {
-      width: 200px;
-    }
-    .router-container {
-      padding: 16px;
-    }
-  }
+}
