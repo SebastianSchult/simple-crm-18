@@ -12,6 +12,7 @@ import {MatCardModule} from '@angular/material/card';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { query, orderBy } from 'firebase/firestore';
 
 @Component({
   selector: 'app-user',
@@ -30,16 +31,17 @@ export class UserComponent implements OnInit{
 
   ngOnInit(): void {
     const usersCollection = collection(this.firestore, 'users');
+    const sortedQuery = query(usersCollection, orderBy('lastName'));
     
-    collectionData(usersCollection, { idField: 'id' })
-  .subscribe((changes: any) => {
-    console.log('Changes:', changes);
-    this.allUsers = changes.map((u: any) => {
-      if (u.birthDate && typeof u.birthDate === 'object' && 'seconds' in u.birthDate) {
-        u.birthDate = new Date(u.birthDate.seconds * 1000);
-      }
-      return u;
-    });
+    collectionData(sortedQuery, { idField: 'id' })
+      .subscribe((changes: any) => {
+        console.log('Changes:', changes);
+        this.allUsers = changes.map((u: any) => {
+          if (u.birthDate && typeof u.birthDate === 'object' && 'seconds' in u.birthDate) {
+            u.birthDate = new Date(u.birthDate.seconds * 1000);
+          }
+          return u;
+        });
       });
   }
 
