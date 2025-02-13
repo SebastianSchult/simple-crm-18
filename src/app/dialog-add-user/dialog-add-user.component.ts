@@ -8,17 +8,16 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
-  NativeDateAdapter
+  NativeDateAdapter,
 } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user.class';
 import { Firestore } from '@angular/fire/firestore';
 import { collection, collectionData, addDoc } from '@angular/fire/firestore';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // Eigener DateAdapter für deutsches Format
 class GermanDateAdapter extends NativeDateAdapter {
@@ -40,7 +39,7 @@ export const DE_DATE_FORMATS = {
     dateInput: 'dd.MM.yyyy',
     monthYearLabel: 'MMM yyyy',
     dateA11yLabel: 'dd.MM.yyyy',
-    monthYearA11yLabel: 'MMMM yyyy'
+    monthYearA11yLabel: 'MMMM yyyy',
   },
 };
 
@@ -49,7 +48,11 @@ export const DE_DATE_FORMATS = {
   standalone: true,
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
-    { provide: DateAdapter, useClass: GermanDateAdapter, deps: [MAT_DATE_LOCALE] },
+    {
+      provide: DateAdapter,
+      useClass: GermanDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
     { provide: MAT_DATE_FORMATS, useValue: DE_DATE_FORMATS },
   ],
   imports: [
@@ -59,11 +62,11 @@ export const DE_DATE_FORMATS = {
     MatFormFieldModule,
     MatDatepickerModule,
     FormsModule,
-    MatProgressBarModule, CommonModule
+    MatProgressBarModule,
+    CommonModule,
   ],
   templateUrl: './dialog-add-user.component.html',
   styleUrl: './dialog-add-user.component.scss',
-  
 })
 export class DialogAddUserComponent {
   firestore: Firestore = inject(Firestore);
@@ -83,26 +86,24 @@ export class DialogAddUserComponent {
    */
   saveUser() {
     if (this.loading) return;
-    
+
     this.loading = true;
     this.user.birthDate = this.birthDate.getTime();
-    
+
     const usersCollection = collection(this.firestore, 'users');
-    addDoc(usersCollection, this.user.toJSON())
-      .then((result) => {
-        this.loading = false;
-        this.user = new User();
-        this.birthDate = new Date();
-        this.openSnackBar();
-        this.dialogRef.close();
-      })
-      ;  
+    addDoc(usersCollection, this.user.toJSON()).then((result) => {
+      this.loading = false;
+      this.user = new User();
+      this.birthDate = new Date();
+      this.openSnackBar();
+      this.dialogRef.close();
+    });
   }
 
-/**
- * Opens a snackbar with a success message after a user has been added.
- * The snackbar shows the message "User added" and has a duration of 3 seconds.
- */
+  /**
+   * Opens a snackbar with a success message after a user has been added.
+   * The snackbar shows the message "User added" and has a duration of 3 seconds.
+   */
 
   openSnackBar() {
     this._snackBar.open('User added', 'Close', { duration: 3000 });

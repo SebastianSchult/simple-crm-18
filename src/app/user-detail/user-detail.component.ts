@@ -2,7 +2,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component } from '@angular/core';
 import { Firestore, doc, docData, deleteDoc } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../models/user.class';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,7 +15,7 @@ import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.co
   standalone: true,
   imports: [MatCardModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.scss'] 
+  styleUrls: ['./user-detail.component.scss'],
 })
 export class UserDetailComponent {
   userID = '';
@@ -37,7 +37,7 @@ export class UserDetailComponent {
     private route: ActivatedRoute,
     private firestore: Firestore,
     public dialog: MatDialog,
-    private router: Router 
+    private router: Router
   ) {}
 
   /**
@@ -72,13 +72,13 @@ export class UserDetailComponent {
   editUserDetail() {
     const userCopy = new User({
       ...this.user.toJSON(),
-      id: this.user.id
+      id: this.user.id,
     });
-    
+
     const dialogRef = this.dialog.open(DialogEditUserComponent, {
-      data: { user: userCopy }
+      data: { user: userCopy },
     });
-    
+
     dialogRef.afterClosed().subscribe((result: User | undefined) => {
       if (result) {
         this.user = result;
@@ -95,11 +95,11 @@ export class UserDetailComponent {
   editAddressMenu() {
     const userCopy = new User({
       ...this.user.toJSON(),
-      id: this.user.id 
+      id: this.user.id,
     });
-    
+
     const dialogRef = this.dialog.open(DialogEditAddressComponent, {
-      data: { user: userCopy }
+      data: { user: userCopy },
     });
 
     dialogRef.afterClosed().subscribe((result: User | undefined) => {

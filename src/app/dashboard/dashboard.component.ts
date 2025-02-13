@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
-import { Firestore, collection, getCountFromServer } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  getCountFromServer,
+} from '@angular/fire/firestore';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 
@@ -10,7 +14,7 @@ import { PLATFORM_ID } from '@angular/core';
   standalone: true,
   imports: [MatCardModule, CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   firestore: Firestore;
@@ -19,15 +23,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   pendingTasks = 3;
   private clockSubscription!: Subscription;
 
-/**
- * Constructs the DashboardComponent.
- * 
- * @param platformId - The platform ID used to determine if the code is running in a browser or server.
- * @param firestore - The Firestore service injected for accessing Firestore database operations.
- */
+  /**
+   * Constructs the DashboardComponent.
+   *
+   * @param platformId - The platform ID used to determine if the code is running in a browser or server.
+   * @param firestore - The Firestore service injected for accessing Firestore database operations.
+   */
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              @Inject(Firestore) firestore: Firestore) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(Firestore) firestore: Firestore
+  ) {
     this.firestore = firestore;
   }
 
@@ -44,7 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup after the component is destroyed.
-   * 
+   *
    * Unsubscribes from the clock subscription if it exists.
    */
   ngOnDestroy(): void {
@@ -53,14 +59,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-/**
- * Asynchronously fetches the total count of users from the Firestore collection.
- * 
- * It attempts to retrieve the count of documents in the 'users' collection
- * from the Firestore database. Upon successful retrieval, it updates the
- * `totalUsers` property with the fetched count and logs the total to the console.
- * If an error occurs during the fetch operation, it logs an error message.
- */
+  /**
+   * Asynchronously fetches the total count of users from the Firestore collection.
+   *
+   * It attempts to retrieve the count of documents in the 'users' collection
+   * from the Firestore database. Upon successful retrieval, it updates the
+   * `totalUsers` property with the fetched count and logs the total to the console.
+   * If an error occurs during the fetch operation, it logs an error message.
+   */
 
   async fetchTotalUsersCount() {
     try {
@@ -68,7 +74,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const snapshot = await getCountFromServer(usersCol);
       this.totalUsers = snapshot.data().count;
     } catch (error) {
-      console.error("Error fetching user count: ", error);
+      console.error('Error fetching user count: ', error);
     }
   }
 }
