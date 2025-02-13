@@ -7,20 +7,17 @@ $text-color: rgba(0, 0, 0, 0.4);
   padding: 0;
 }
 
-/* Wrapper für die Tabelle, der horizontales Scrollen ermöglicht */
 .table-wrapper {
   overflow-x: auto;
 }
 
-/* FAB: Positionierung anpassen */
 .add-user-btn {
-  position: absolute;
+  position: fixed;
   right: 56px;
   bottom: 56px;
   z-index: 10;
 }
 
-/* Tabelle */
 .user-table {
   width: 100%;
   border-collapse: collapse;
@@ -68,7 +65,6 @@ $text-color: rgba(0, 0, 0, 0.4);
   }
 }
 
-/* Responsive Anpassungen */
 @media (max-width: 600px) {
   $cell-height: 50px;
   $padding-left: 8px;
@@ -85,7 +81,6 @@ $text-color: rgba(0, 0, 0, 0.4);
     }
   }
 
-  /* FAB anpassen für kleinere Bildschirme */
   .add-user-btn {
     right: 16px;
     bottom: 16px;
