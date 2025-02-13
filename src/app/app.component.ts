@@ -20,12 +20,25 @@ export class AppComponent implements OnInit {
   sidenavMode: 'side' | 'over' = 'side';
   sidenavOpened = true;
 
+  /**
+   * Initializes an instance of AppComponent.
+   * 
+   * @param breakpointObserver - Used to observe media query breakpoints.
+   * @param authService - Service used for authentication operations.
+   * @param router - Angular Router for navigation.
+   */
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
     private router: Router
   ) {}
 
+  /**
+   * Listens to the Handset breakpoint and updates the sidenav mode accordingly.
+   * In handset mode, the sidenav is displayed as an overlay and is initially closed.
+   * In other modes, the sidenav is displayed as a side drawer and is initially open.
+   */
   ngOnInit(): void {
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
       if (result.matches) {
@@ -38,10 +51,15 @@ export class AppComponent implements OnInit {
     });
   }
 
+/**
+ * Logs out the current user by calling the AuthService's logout method.
+ * On successful logout, navigates to the login page.
+ * Logs an error message to the console if logout fails.
+ */
+
   logout() {
     this.authService.logout()
       .then(() => {
-        // Nach dem Logout zur Login-Seite navigieren (oder Auth-Komponente)
         this.router.navigate(['/login']);
       })
       .catch(error => {

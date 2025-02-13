@@ -9,14 +9,21 @@ import { map, take } from 'rxjs/operators';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
+  /**
+   * Überprüft, ob der Benutzer authentifiziert ist. Wenn nicht, wird eine
+   * Umleitung zur AuthComponent ausgelöst.
+   *
+   * @returns Ein Observable, das einen boolean-Wert oder einen UrlTree-Wert liefert.
+   *          Der boolean-Wert gibt an, ob der Benutzer authentifiziert ist.
+   *          Der UrlTree-Wert repräsentiert die Umleitung zur AuthComponent.
+   */
   canActivate(): Observable<boolean | UrlTree> {
     return this.authService.authState$.pipe(
       take(1),
-      map(user => {
+      map((user) => {
         if (user) {
           return true;
         }
-        // Nicht authentifiziert? Umleitung zur AuthComponent.
         return this.router.createUrlTree(['/auth']);
       })
     );

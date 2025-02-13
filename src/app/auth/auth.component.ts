@@ -15,11 +15,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
-  // Login-Form Controls
   loginEmail = new FormControl('', [Validators.required, Validators.email]);
   loginPassword = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
-  // Registrierungs-Form Controls
   registerEmail = new FormControl('', [Validators.required, Validators.email]);
   registerPassword = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
@@ -28,6 +26,12 @@ export class AuthComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  /**
+   * Versucht den Benutzer mit der E-Mail und dem Passwort anzumelden.
+   * Wenn die E-Mail oder das Passwort ungültig ist, tut nichts.
+   * Wenn die Anmeldung erfolgreich ist, leitet den Benutzer auf das Dashboard um.
+   * Wenn die Anmeldung fehlschlägt, zeigt die Fehlermeldung an.
+   */
   login() {
     if (this.loginEmail.invalid || this.loginPassword.invalid) return;
     this.loading = true;
@@ -43,6 +47,12 @@ export class AuthComponent {
       });
   }
 
+  /**
+   * Versucht einen neuen Benutzer mit der E-Mail und dem Passwort anzulegen.
+   * Wenn die E-Mail oder das Passwort ungültig ist, tut nichts.
+   * Wenn die Registrierung erfolgreich ist, leitet den Benutzer auf das Dashboard um.
+   * Wenn die Registrierung fehlschlägt, zeigt die entsprechende Fehlermeldung an.
+   */
   register() {
     if (this.registerEmail.invalid || this.registerPassword.invalid) return;
     this.loading = true;
@@ -71,6 +81,11 @@ export class AuthComponent {
       });
   }
 
+  /**
+   * Logs in as a guest user, without asking for any login credentials.
+   * After a successful login, redirects to the dashboard.
+   * If the login fails, shows the corresponding error message.
+   */
   loginAsGuest() {
     this.loading = true;
     this.authService.loginAsGuest()

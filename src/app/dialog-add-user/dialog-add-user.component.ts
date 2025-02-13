@@ -73,18 +73,23 @@ export class DialogAddUserComponent {
   loading = false;
   private _snackBar = inject(MatSnackBar);
 
+  /**
+   * Saves the user to the Firestore.
+   * If the user is not valid, it doesn't do anything.
+   * If the user is valid, it adds the user to the Firestore and logs the user-id.
+   * If the addition is successful, it logs a success message, resets the user object,
+   * closes the dialog with the added user as the result, and shows a snackbar with
+   * a success message. If the addition fails, it logs an error message and does nothing.
+   */
   saveUser() {
     if (this.loading) return;
     
     this.loading = true;
     this.user.birthDate = this.birthDate.getTime();
-    console.log('User saved:', this.user);
     
     const usersCollection = collection(this.firestore, 'users');
     addDoc(usersCollection, this.user.toJSON())
       .then((result) => {
-        console.log('User added with ID:', result.id);
-        // this.dialogRef.close();
         this.loading = false;
         this.user = new User();
         this.birthDate = new Date();
@@ -93,6 +98,11 @@ export class DialogAddUserComponent {
       })
       ;  
   }
+
+/**
+ * Opens a snackbar with a success message after a user has been added.
+ * The snackbar shows the message "User added" and has a duration of 3 seconds.
+ */
 
   openSnackBar() {
     this._snackBar.open('User added', 'Close', { duration: 3000 });
