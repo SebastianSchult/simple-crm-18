@@ -15,11 +15,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
-    // Firebase-App initialisieren
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    // Auth-Provider bereitstellen (mittels Factory)
     provideAuth(() => getAuthFactory()),
-    // Firestore bereitstellen
     provideFirestore(() => getFirestore()),
     provideAnimationsAsync()
   ]
