@@ -1,25 +1,51 @@
-<div class="dashboard-header"><h1>DASHBOARD</h1></div><br>
+<div class="dashboard-header">
+  <h1>DASHBOARD</h1>
+</div>
+<br>
 <div class="dashboard-container">
-    <mat-card class="metric-card">
-      <mat-card-title>Total Users</mat-card-title>
-      <mat-card-content>
-        <h2>{{ totalUsers }}</h2>
-        <p>Registered users</p>
-      </mat-card-content>
-    </mat-card>
-  
-    <mat-card class="metric-card">
-        <mat-card-title>Current Date</mat-card-title>
-        <mat-card-content>
-          <h2>{{ currentDate | date:'fullDate' }}</h2>
-        </mat-card-content>
-      </mat-card>
-  
-      <mat-card class="metric-card">
-        <mat-card-title>Current Time</mat-card-title>
-        <mat-card-content>
-          <!-- Hier wird die Uhrzeit im Format HH:mm:ss angezeigt -->
-          <h2>{{ currentDate | date:'HH:mm:ss' }}</h2>
-        </mat-card-content>
-      </mat-card>
-  </div>
+  <!-- Vorhandene Mat-Cards -->
+  <mat-card class="metric-card">
+    <mat-card-title>Total Users</mat-card-title>
+    <mat-card-content>
+      <h2>{{ totalUsers }}</h2>
+      <p>Registered users</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="metric-card">
+    <mat-card-title>Current Date</mat-card-title>
+    <mat-card-content>
+      <h2>{{ currentDate | date:'fullDate' }}</h2>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="metric-card">
+    <mat-card-title>Current Time</mat-card-title>
+    <mat-card-content>
+      <h2>{{ currentDate | date:'HH:mm:ss' }}</h2>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Neue Mat-Card für Top 10 DAX Aktien -->
+  <mat-card class="metric-card" *ngIf="daxStocks && daxStocks.length">
+    <mat-card-title>Top 10 DAX Aktien</mat-card-title>
+    <mat-card-content>
+      <table>
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Preis</th>
+            <th>Änderung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stock of daxStocks">
+            <td>{{ stock.symbol }}</td>
+            <td>{{ stock.price | currency:'EUR' }}</td>
+            <td>{{ stock.change }} ({{ stock.percentChange }}%)</td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

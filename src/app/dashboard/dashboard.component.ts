@@ -3,7 +3,8 @@ import { interval, Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
-import { FirebaseService } from '../services/firebase.service'; // Pfad ggf. anpassen
+import { FirebaseService } from '../services/firebase.service';
+import { StockService } from '../services/stock.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,30 +16,15 @@ import { FirebaseService } from '../services/firebase.service'; // Pfad ggf. anp
 export class DashboardComponent implements OnInit, OnDestroy {
   totalUsers = 0;
   currentDate: Date = new Date();
-  pendingTasks = 3;
+  daxStocks: any[] = [];
   private clockSubscription!: Subscription;
-
-  
-/**
- * Constructs the DashboardComponent.
- * 
- * @param platformId - An object representing the platform id, used to determine
- *   if the application is running in a browser environment.
- * @param firebaseService - An instance of FirebaseService used to interact
- *   with Firebase for various operations like fetching the total users count.
- */
+  private stockSubscription!: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private stockService: StockService
   ) {}
-
-/**
- * OnInit lifecycle hook. It is called when the component is initialized.
- * It fetches the total number of users using the FirebaseService.
- * If the application is running in a browser environment, it starts an interval
- * that updates the currentDate every second to reflect the current time.
- */
 
   ngOnInit(): void {
     this.fetchTotalUsersCount();
@@ -47,31 +33,48 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.currentDate = new Date();
       });
     }
+    this.fetchDaxStocks();
   }
 
-  /**
-   * Clean up the subscription to the interval when the component is destroyed.
-   * This prevents memory leaks by unsubscribing from the interval.
-   */
   ngOnDestroy(): void {
     if (this.clockSubscription) {
       this.clockSubscription.unsubscribe();
     }
+    if (this.stockSubscription) {
+      this.stockSubscription.unsubscribe();
+    }
   }
 
- 
-  /**
-   * Fetches the total count of users in the Firestore.
-   * Uses the FirebaseService to call the getUsersCount() function and
-   * updates the totalUsers property with the received count.
-   * Logs an error message if the operation fails.
-   */
   async fetchTotalUsersCount() {
     try {
       this.totalUsers = await this.firebaseService.getUsersCount();
       console.log('Total Users:', this.totalUsers);
     } catch (error) {
-      console.error('Error fetching user count: ', error);
+      console.error('Error fetching user count:', error);
     }
+  }
+
+  fetchDaxStocks() {
+    this.stockSubscription = this.stockService.getDaxQuotes().subscribe(
+      (response: any) => {
+        // Die API liefert ein Objekt mit den Schlüsseln "meta" und "body".
+        if (response && response.body) {
+          this.daxStocks = response.body.map((stock: any) => {
+            return {
+              symbol: stock.symbol,
+              price: stock.regularMarketPrice,       // Passen Sie die Feldnamen ggf. an
+              change: stock.regularMarketChange,
+              percentChange: stock.regularMarketChangePercent
+            };
+          });
+        } else {
+          console.error('Keine Aktien-Daten erhalten:', response);
+        }
+        console.log('DAX Stocks:', this.daxStocks);
+      },
+      (error) => {
+        console.error('Error fetching DAX stocks:', error);
+      }
+    );
   }
 }

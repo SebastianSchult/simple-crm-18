@@ -17,9 +17,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/simple-crm-18",
+            "outputPath": "dist/simple-crm",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "baseHref": "/simple-crm/",
             "polyfills": [
               "zone.js"
             ],
