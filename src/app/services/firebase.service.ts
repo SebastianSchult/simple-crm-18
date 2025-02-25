@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, getCountFromServer } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, getCountFromServer, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -76,5 +76,19 @@ export class FirebaseService {
     const usersCol = collection(this.firestore, 'users');
     const snapshot = await getCountFromServer(usersCol);
     return snapshot.data().count;
+  }
+
+  addTask(task: any): Promise<DocumentReference> {
+    console.log('Adding task to Firestore:', task);
+    const tasksCollection = collection(this.firestore, 'tasks');
+    return addDoc(tasksCollection, task)
+      .then((docRef) => {
+        console.log('Task erfolgreich gespeichert mit ID:', docRef.id);
+        return docRef; // Rückgabe der Referenz zum gespeicherten Dokument
+      })
+      .catch((error) => {
+        console.error('Fehler beim Speichern der Aufgabe:', error);
+        throw error; // Fehler weiterleiten
+      });
   }
 } 

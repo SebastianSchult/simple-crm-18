@@ -1,47 +1,103 @@
-// tasks.component.scss
-mat-toolbar {
-    margin-bottom: 20px;
-  }
-  
-  mat-card {
-    padding: 20px;
-    margin: 20px;
-  }
-  
-  mat-table {
-    width: 100%;
-    
-    .mat-column-dueDate {
-      flex: 0 0 150px;
-    }
-  
-    .mat-column-status {
-      flex: 0 0 160px;
-    }
-  
-    .mat-column-actions {
-      flex: 0 0 120px;
-      justify-content: flex-end;
-    }
-  }
-  
-  .status-chip {
-    border-radius: 16px;
-    padding: 4px 12px;
-    font-size: 12px;
-  
-    &.offen {
-      background-color: #ffd740;
-      color: rgba(0,0,0,0.87);
-    }
-  
-    &.in-bearbeitung {
-      background-color: #69f0ae;
-      color: rgba(0,0,0,0.87);
-    }
-  
-    &.erledigt {
-      background-color: #b0bec5;
-      color: rgba(0,0,0,0.87);
+$padding-left: 16px;
+$cell-height: 60px;
+$border-color: rgba(0, 0, 0, 0.12);
+$text-color: rgba(0, 0, 0, 0.4);
+
+.mat-card {
+  padding: 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.add-task-btn {
+  position: fixed;
+  right: 56px;
+  bottom: 56px;
+  z-index: 10;
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  thead {
+    tr {
+      cursor: unset;
+      &:hover {
+        background-color: unset;
+      }
     }
   }
+
+  tr {
+    border-bottom: 1px solid $border-color;
+    &:last-child {
+      border-bottom: none;
+    }
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    th {
+      border-bottom: 1px solid $border-color;
+    }
+  }
+
+  th,
+  td {
+    height: $cell-height;
+    padding-right: 16px;
+
+    &:first-child {
+      padding-left: $padding-left;
+    }
+  }
+
+  th {
+    color: $text-color;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: start;
+  }
+}
+
+@media (max-width: 600px) {
+  $cell-height: 50px;
+  $padding-left: 8px;
+
+  .task-table {
+    th,
+    td {
+      height: $cell-height;
+      padding: 8px;
+      font-size: 12px;
+      &:first-child {
+        padding-left: $padding-left;
+      }
+    }
+  }
+
+  .add-task-btn {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 960px) {
+  .task-table {
+    th,
+    td {
+      padding: 10px;
+      font-size: 13px;
+    }
+  }
+
+  .add-task-btn {
+    right: 24px;
+    bottom: 24px;
+  }
+}
