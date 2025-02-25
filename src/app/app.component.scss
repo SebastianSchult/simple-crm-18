@@ -7,6 +7,10 @@
   width: 300px;
 }
 
+.logout-btn {
+  color: #1976d2;
+}
+
 .logo {
   height: 56px;
   width: 75%;
@@ -20,7 +24,8 @@
   align-items: center;
 }
 
-mat-toolbar, mat-toolbar-row {
+mat-toolbar,
+mat-toolbar-row {
   min-height: 56px;
   height: 56px;
 }
@@ -51,12 +56,10 @@ mat-toolbar, mat-toolbar-row {
   padding: 16px 56px;
 }
 
-/* Spacer, um den Logout-Button rechts auszurichten */
 .spacer {
   flex: 1 1 auto;
 }
 
-/* Responsive Anpassungen */
 @media (max-width: 600px) {
   .sidenav {
     width: 200px;
