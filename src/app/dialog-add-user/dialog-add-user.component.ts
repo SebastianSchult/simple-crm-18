@@ -12,14 +12,13 @@ import {
 } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user.class';
-import { Firestore } from '@angular/fire/firestore';
-import { collection, collectionData, addDoc } from '@angular/fire/firestore';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FirebaseService } from '../services/firebase.service';
 
-// Eigener DateAdapter für deutsches Format
+
 class GermanDateAdapter extends NativeDateAdapter {
   override parse(value: string | null, parseFormat?: any): Date | null {
     if (value && typeof value === 'string' && value.includes('.')) {
@@ -66,45 +65,49 @@ export const DE_DATE_FORMATS = {
     CommonModule,
   ],
   templateUrl: './dialog-add-user.component.html',
-  styleUrl: './dialog-add-user.component.scss',
+  styleUrls: ['./dialog-add-user.component.scss'],
 })
 export class DialogAddUserComponent {
-  firestore: Firestore = inject(Firestore);
   dialogRef = inject(MatDialogRef<DialogAddUserComponent>);
+  private _snackBar = inject(MatSnackBar);
+  private firebaseService: FirebaseService = inject(FirebaseService);
+
   user = new User();
   birthDate: Date = new Date();
   loading = false;
-  private _snackBar = inject(MatSnackBar);
 
+  
   /**
-   * Saves the user to the Firestore.
-   * If the user is not valid, it doesn't do anything.
-   * If the user is valid, it adds the user to the Firestore and logs the user-id.
-   * If the addition is successful, it logs a success message, resets the user object,
-   * closes the dialog with the added user as the result, and shows a snackbar with
-   * a success message. If the addition fails, it logs an error message and does nothing.
+   * Speichert den neuen User in Firestore.
+   * Wenn der User nicht valid ist, passiert nichts.
+   * Wenn der User valid ist, wird er in Firestore gespeichert und der user-id wird geloggt.
+   * Wenn der Speichervorgang erfolgreich war, wird eine Erfolgsmeldung geloggt,
+   * das User-Objekt wird resettet, der Dialog wird mit dem neuen User als Ergebnis
+   * geschlossen und eine Snackbar mit einer Erfolgsmeldung wird angezeigt.
+   * Wenn der Speichervorgang fehlschlug, wird eine Fehlermeldung geloggt und nichts
+   * weiter passiert.
    */
   saveUser() {
     if (this.loading) return;
-
     this.loading = true;
     this.user.birthDate = this.birthDate.getTime();
-
-    const usersCollection = collection(this.firestore, 'users');
-    addDoc(usersCollection, this.user.toJSON()).then((result) => {
-      this.loading = false;
-      this.user = new User();
-      this.birthDate = new Date();
-      this.openSnackBar();
-      this.dialogRef.close();
-    });
+    this.firebaseService.addUser(this.user.toJSON())
+      .then(() => {
+        this.loading = false;
+        this.user = new User();
+        this.birthDate = new Date();
+        this.openSnackBar();
+        this.dialogRef.close();
+      })
+      .catch((error) => {
+        console.error('Error adding user:', error);
+        this.loading = false;
+      });
   }
 
   /**
-   * Opens a snackbar with a success message after a user has been added.
-   * The snackbar shows the message "User added" and has a duration of 3 seconds.
+   * Zeigt eine Snackbar mit einer Erfolgsmeldung an.
    */
-
   openSnackBar() {
     this._snackBar.open('User added', 'Close', { duration: 3000 });
   }

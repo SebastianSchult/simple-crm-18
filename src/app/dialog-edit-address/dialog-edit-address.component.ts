@@ -11,8 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { User } from '../../models/user.class';
 import { CommonModule } from '@angular/common';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FirebaseService } from '../services/firebase.service';// Importiere den FirebaseService
 
 @Component({
   selector: 'app-dialog-edit-address',
@@ -30,34 +30,37 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./dialog-edit-address.component.scss'],
 })
 export class DialogEditAddressComponent {
-  firestore: Firestore = inject(Firestore);
   user: User;
   loading = false;
   dialogRef: MatDialogRef<DialogEditAddressComponent> = inject(MatDialogRef);
   private _snackBar = inject(MatSnackBar);
 
-  /**
-   * The constructor of the DialogEditAddressComponent.
-   * It takes in a {user: User} object as a parameter and assigns it to the
-   * user property of the component. This user object is then used to
-   * populate the form fields in the dialog.
-   * @param data The {user: User} object to be edited.
-   */
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { user: User }) {
+  
+/**
+ * Initializes a new instance of the DialogEditAddressComponent class.
+ * 
+ * @param data An object containing the user data to be edited. The user data
+ * is assigned to the user property of the component.
+ * @param firebaseService An instance of the FirebaseService used for
+ * interacting with Firestore.
+ */
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { user: User },
+    private firebaseService: FirebaseService
+  ) {
     this.user = data.user;
   }
 
-  /**
-   * Updates the user information in the Firestore.
-   * If the user is currently being saved (loading is true), the function returns immediately.
-   * Sets the loading state to true and logs the user object to be updated.
-   * If the user object does not have an ID, logs an error and sets loading to false.
-   * Creates a reference to the user document in Firestore and attempts to update it with
-   * the user's data. On success, logs a success message, sets loading to false, shows a
-   * snackbar notification, and closes the dialog returning the updated user.
-   * On failure, logs an error message and sets loading to false.
-   */
 
+  /**
+   * Saves the user to the Firestore.
+   * If the user is not valid, it doesn't do anything.
+   * If the user is valid, it updates the user in the Firestore and logs the user-id.
+   * If the update is successful, it logs a success message, resets the user object,
+   * closes the dialog with the updated user as the result, and shows a snackbar with
+   * a success message. If the update fails, it logs an error message and does nothing.
+   */
   saveUser() {
     if (this.loading) return;
     this.loading = true;
@@ -68,9 +71,7 @@ export class DialogEditAddressComponent {
       return;
     }
 
-    const userDocRef = doc(this.firestore, 'users', this.user.id);
-
-    updateDoc(userDocRef, this.user.toJSON())
+    this.firebaseService.updateUser(this.user.id, this.user.toJSON())
       .then(() => {
         this.loading = false;
         this.openSnackBar();
@@ -82,6 +83,7 @@ export class DialogEditAddressComponent {
       });
   }
 
+  
   /**
    * Opens a snackbar notification with a success message after a user has been edited.
    * The snackbar shows the message "User edited" and has a duration of 3 seconds.
