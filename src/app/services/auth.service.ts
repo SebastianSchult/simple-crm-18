@@ -1,32 +1,42 @@
-// src/app/services/auth.service.ts
-import { Injectable } from '@angular/core';
-import { Auth, authState, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut } from '@angular/fire/auth';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  Auth,
+  authState,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInAnonymously,
+  signOut,
+} from '@angular/fire/auth';
+import { Observable, of } from 'rxjs';
 import { inject } from '@angular/core';
-import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private auth: Auth = inject(Auth);
-  
-  // Observable für den aktuellen Authentifizierungsstatus
-  authState$ : Observable<any> = authState(this.auth);
+  authState$: Observable<any>;
 
-  // Standard-Login mit Email und Passwort
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    // Nur im Browser den authState beobachten – im SSR einen leeren Observable liefern
+    if (isPlatformBrowser(this.platformId)) {
+      this.authState$ = authState(this.auth);
+    } else {
+      this.authState$ = of(null);
+    }
+  }
+
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  // Registrierung
   register(email: string, password: string) {
     return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  // Gastzugang: anonyme Authentifizierung
   loginAsGuest() {
     return signInAnonymously(this.auth);
   }
 
-  // Logout
   logout() {
     return signOut(this.auth);
   }
