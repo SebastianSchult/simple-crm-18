@@ -1,0 +1,37 @@
+<mat-card appearance="outlined">
+  <div class="table-wrapper">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>dueDate</th>
+          <th>status</th>
+          <th>created at</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of allTasks" [routerLink]="'/task/' + task.id">
+          <td>{{ task.title }} {{ task.lastName }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.dueDate | date:'dd.MM.yyyy' }}</td>
+          <td>{{ task.status }}</td>
+          <td>{{ task.createdAt | date:'dd.MM.yyyy' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</mat-card>
+
+<button
+  (click)="openDialog()"
+  class="add-user-btn"
+  mat-fab
+  color="primary"
+  #tooltip="matTooltip"
+  matTooltip="add Task"
+  [matTooltipPosition]="position.value!"
+  matTooltipHideDelay="1000"
+>
+  <mat-icon>add</mat-icon>
+</button>

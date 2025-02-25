@@ -1,0 +1,47 @@
+// tasks.component.scss
+mat-toolbar {
+    margin-bottom: 20px;
+  }
+  
+  mat-card {
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  mat-table {
+    width: 100%;
+    
+    .mat-column-dueDate {
+      flex: 0 0 150px;
+    }
+  
+    .mat-column-status {
+      flex: 0 0 160px;
+    }
+  
+    .mat-column-actions {
+      flex: 0 0 120px;
+      justify-content: flex-end;
+    }
+  }
+  
+  .status-chip {
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 12px;
+  
+    &.offen {
+      background-color: #ffd740;
+      color: rgba(0,0,0,0.87);
+    }
+  
+    &.in-bearbeitung {
+      background-color: #69f0ae;
+      color: rgba(0,0,0,0.87);
+    }
+  
+    &.erledigt {
+      background-color: #b0bec5;
+      color: rgba(0,0,0,0.87);
+    }
+  }
