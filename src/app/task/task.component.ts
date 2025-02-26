@@ -40,7 +40,6 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.firebaseService.getTasks().subscribe((changes: any) => {
-      console.log('Task changes:', changes);
       this.allTasks = changes.map((u: any) => {
         if (
           u.dueDate &&
@@ -56,5 +55,9 @@ export class TasksComponent implements OnInit {
 
   openDialog(): void {
     this.dialog.open(TaskDialogComponent);
+  }
+
+  saveTask(task: Task): void {
+    this.firebaseService.addTask(task)
   }
 }

@@ -129,7 +129,6 @@ export class UserDetailComponent {
     const userDocRef = doc(this.firestore, 'users', this.userID);
     deleteDoc(userDocRef)
       .then(() => {
-        console.log('User successfully deleted.');
         this.router.navigate(['/user']);
       })
       .catch((error) => {

@@ -40,9 +40,7 @@ export class UserComponent implements OnInit {
   constructor(private firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
-    // Nutze den Service, um Benutzer abzurufen
     this.firebaseService.getUsers().subscribe((changes: any) => {
-      console.log('Changes:', changes);
       this.allUsers = changes.map((u: any) => {
         if (u.birthDate && typeof u.birthDate === 'object' && 'seconds' in u.birthDate) {
           u.birthDate = new Date(u.birthDate.seconds * 1000);

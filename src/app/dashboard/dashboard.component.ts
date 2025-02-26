@@ -89,7 +89,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async fetchTotalTasksCount() {
     try {
       this.totalTasks = await this.firebaseService.getTasksCount();
-      console.log('Total Tasks:', this.totalTasks);
     } catch (error) {
       console.error('Error fetching tasks count:', error);
     }
