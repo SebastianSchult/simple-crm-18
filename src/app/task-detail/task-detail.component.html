@@ -1,0 +1,10 @@
+<mat-card *ngIf="task">
+    <mat-card-title>Task Details</mat-card-title>
+    <mat-card-content>
+      <p><strong>Title:</strong> {{ task.title }}</p>
+      <p><strong>Description:</strong> {{ task.description }}</p>
+      <p><strong>Due Date:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
+      <p><strong>Status:</strong> {{ task.status }}</p>
+      <p><strong>Created At:</strong> {{ task.createdAt | date:'dd.MM.yyyy' }}</p>
+    </mat-card-content>
+  </mat-card>

@@ -1,6 +1,8 @@
+import { Task } from './../../models/task.class';
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, getCountFromServer, DocumentReference } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, getDoc, doc, updateDoc, deleteDoc, getCountFromServer, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -99,9 +101,31 @@ export class FirebaseService {
       });
   }
 
+  /**
+   * Retrieves the total number of tasks in the Firestore 'tasks' collection.
+   * 
+   * @returns A promise that resolves with the total number of tasks.
+   */
   async getTasksCount(): Promise<number> {
     const tasksCollection = collection(this.firestore, 'tasks');
     const snapshot = await getCountFromServer(tasksCollection);
     return snapshot.data().count;
+  }
+
+  /**
+   * Retrieves a task document from the Firestore 'tasks' collection by its ID.
+   * 
+   * @param taskId The ID of the task document to retrieve.
+   * @returns A promise that resolves with the Task object for the retrieved task.
+   * @throws Will throw an error if the task does not exist.
+   */
+  async getTaskById(taskId: string): Promise<Task> {
+    const taskDocRef = doc(this.firestore, 'tasks', taskId);
+    const taskSnap = await getDoc(taskDocRef);
+    if (taskSnap.exists()) {
+      return taskSnap.data() as Task;
+    } else {
+      throw new Error('No such task!');
+    }
   }
 } 
