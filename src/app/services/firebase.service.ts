@@ -78,17 +78,30 @@ export class FirebaseService {
     return snapshot.data().count;
   }
 
+  /**
+   * Adds a new task document to the Firestore 'tasks' collection.
+   * Each task document will have an auto-generated 'id' field.
+   * 
+   * @param task The task data to add to the new task document.
+   * @returns A promise that resolves with a DocumentReference to the newly added task.
+   * Logs messages to the console upon success or failure.
+   * @throws Will throw an error if the task could not be saved.
+   */
+
   addTask(task: any): Promise<DocumentReference> {
-    console.log('Adding task to Firestore:', task);
     const tasksCollection = collection(this.firestore, 'tasks');
     return addDoc(tasksCollection, task)
       .then((docRef) => {
-        console.log('Task erfolgreich gespeichert mit ID:', docRef.id);
-        return docRef; // Rückgabe der Referenz zum gespeicherten Dokument
+        return docRef;
       })
       .catch((error) => {
-        console.error('Fehler beim Speichern der Aufgabe:', error);
-        throw error; // Fehler weiterleiten
+        throw error;
       });
+  }
+
+  async getTasksCount(): Promise<number> {
+    const tasksCollection = collection(this.firestore, 'tasks');
+    const snapshot = await getCountFromServer(tasksCollection);
+    return snapshot.data().count;
   }
 } 

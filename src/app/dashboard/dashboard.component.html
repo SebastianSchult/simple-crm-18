@@ -13,6 +13,14 @@
   </mat-card>
 
   <mat-card class="metric-card">
+    <mat-card-title>Total Tasks</mat-card-title>
+    <mat-card-content>
+      <h2>{{ totalTasks }}</h2>
+      <p>Existing tasks</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="metric-card">
     <mat-card-title>Current Date</mat-card-title>
     <mat-card-content>
       <h2>{{ currentDate | date:'fullDate' }}</h2>
@@ -26,16 +34,15 @@
     </mat-card-content>
   </mat-card>
 
-  <!-- Neue Mat-Card für Top 10 DAX Aktien -->
   <mat-card class="metric-card" *ngIf="daxStocks && daxStocks.length">
-    <mat-card-title>Top 10 DAX Aktien</mat-card-title>
+    <mat-card-title>Top 10 DAX Stocks</mat-card-title>
     <mat-card-content>
-      <table>
+      <table class="dax-table">
         <thead>
-          <tr>
+          <tr >
             <th>Symbol</th>
-            <th>Preis</th>
-            <th>Änderung</th>
+            <th>Price</th>
+            <th>Changes</th>
           </tr>
         </thead>
         <tbody>

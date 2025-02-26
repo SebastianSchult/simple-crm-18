@@ -15,3 +15,24 @@
     flex: 1 1 250px;
     text-align: center;
   }
+
+  .dax-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; // gleichmäßige Spaltenbreiten
+  
+    th, td {
+      padding: 1rem;        // mehr Innenabstand
+      text-align: left;
+      word-wrap: break-word; // Umbruch, wenn der Text zu lang ist
+    }
+  
+    th {
+      font-size: 1.2rem;     // größere Schrift für Überschriften
+      background-color: #f5f5f5; // dezente Hintergrundfarbe
+    }
+  
+    td {
+      font-size: 1rem;
+    }
+  }

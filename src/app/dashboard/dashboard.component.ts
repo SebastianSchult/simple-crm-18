@@ -15,19 +15,35 @@ import { StockService } from '../services/stock.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   totalUsers = 0;
+  totalTasks = 0;
   currentDate: Date = new Date();
   daxStocks: any[] = [];
   private clockSubscription!: Subscription;
   private stockSubscription!: Subscription;
 
+  /**
+   * Constructor of the DashboardComponent.
+   * It takes in three parameters:
+   * - platformId: Object: The platformId is used to check if the platform is a browser.
+   * - firebaseService: FirebaseService: The firebaseService is used to interact with the Firestore.
+   * - stockService: StockService: The stockService is used to get the DAX stocks from the Alpha Vantage API.
+   */
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private firebaseService: FirebaseService,
     private stockService: StockService
   ) {}
 
+  /**
+   * OnInit lifecycle hook. It is called when the component is initialized.
+   * It first fetches the total number of users from the Firestore.
+   * If the platform is a browser, it then starts a subscription to a clock
+   * that updates the currentDate every second.
+   * Finally, it fetches the DAX stocks from the Alpha Vantage API.
+   */
   ngOnInit(): void {
     this.fetchTotalUsersCount();
+    this.fetchTotalTasksCount();
     if (isPlatformBrowser(this.platformId)) {
       this.clockSubscription = interval(1000).subscribe(() => {
         this.currentDate = new Date();
@@ -35,6 +51,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.fetchDaxStocks();
   }
+
+/**
+ * OnDestroy lifecycle hook. It is called when the component is destroyed.
+ * Unsubscribes from clockSubscription and stockSubscription to prevent
+ * memory leaks. Ensures that no subscriptions remain active after the
+ * component is removed from the DOM.
+ */
 
   ngOnDestroy(): void {
     if (this.clockSubscription) {
@@ -45,32 +68,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Fetches the total user count from the Firestore database.
+   * The count is stored in the totalUsers property.
+   * If an error occurs, it is logged to the console.
+   */
   async fetchTotalUsersCount() {
     try {
       this.totalUsers = await this.firebaseService.getUsersCount();
-      console.log('Total Users:', this.totalUsers);
     } catch (error) {
       console.error('Error fetching user count:', error);
+    }
+  }
+
+  async fetchTotalTasksCount() {
+    try {
+      this.totalTasks = await this.firebaseService.getTasksCount();
+      console.log('Total Tasks:', this.totalTasks);
+    } catch (error) {
+      console.error('Error fetching tasks count:', error);
     }
   }
 
   fetchDaxStocks() {
     this.stockSubscription = this.stockService.getDaxQuotes().subscribe(
       (response: any) => {
-        // Die API liefert ein Objekt mit den Schlüsseln "meta" und "body".
         if (response && response.body) {
           this.daxStocks = response.body.map((stock: any) => {
             return {
               symbol: stock.symbol,
-              price: stock.regularMarketPrice,       // Passen Sie die Feldnamen ggf. an
+              price: stock.regularMarketPrice,      
               change: stock.regularMarketChange,
               percentChange: stock.regularMarketChangePercent
             };
           });
         } else {
-          console.error('Keine Aktien-Daten erhalten:', response);
+          console.error('got no Stocks:', response);
         }
-        console.log('DAX Stocks:', this.daxStocks);
       },
       (error) => {
         console.error('Error fetching DAX stocks:', error);
