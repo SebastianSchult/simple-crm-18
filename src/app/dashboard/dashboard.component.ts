@@ -81,6 +81,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Fetches the total task count from the Firestore database.
+   * The count is stored in the totalTasks property.
+   * If an error occurs, it is logged to the console.
+   */
   async fetchTotalTasksCount() {
     try {
       this.totalTasks = await this.firebaseService.getTasksCount();
@@ -89,6 +94,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       console.error('Error fetching tasks count:', error);
     }
   }
+
+/**
+ * Subscribes to the DAX stock quotes using the StockService and updates the daxStocks property.
+ * The subscription retrieves the current stock prices, changes, and percent changes for each stock.
+ * If the response contains valid stock data, it maps the data to the daxStocks array.
+ * Logs an error message if no stocks are retrieved or if an error occurs during the fetch.
+ */
 
   fetchDaxStocks() {
     this.stockSubscription = this.stockService.getDaxQuotes().subscribe(

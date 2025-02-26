@@ -1,18 +1,16 @@
-/* Container, der den gesamten Bildschirm abdeckt */
 .auth-fullscreen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #ffff; /* Hintergrundfarbe anpassbar */
-    z-index: 10000; /* Hoch genug, um über allen anderen Inhalten zu liegen */
+    background-color: #ffff; 
+    z-index: 10000; 
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
-  /* Authentifizierungs-Container, der das Formular zentriert */
   .auth-container {
     width: 100%;
     max-width: 400px;
@@ -21,20 +19,61 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mat-mdc-tab-body.mat-mdc-tab-body-active {
+    height: 280px !important;
+  }
+
+  .mat-mdc-tab-body-content {
+    overflow: hidden !important;
+  }
+
+  .form-container {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .form-container {
+    flex: 1;      // nimmt den verfügbaren Platz ein
+    display: flex;
+    flex-direction: column;
+    gap: 16px;    // Abstand zwischen den Feldern
+  }
+
+  .login-tab {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   
-  /* Vollbreite */
   .full-width {
     width: 100%;
   }
   
-  /* Fehlermeldungen */
   .error-message {
     color: red;
     margin: 8px 0;
   }
   
-  /* Gastzugang-Button */
   .guest-access {
-    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    padding-top: 32px;
+  }
+
+  .button-container {
+    margin-bottom: 8px;
+  }
+
+  .guest-access {
+    margin-bottom: 8px;
+  }
+
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;  
   }
