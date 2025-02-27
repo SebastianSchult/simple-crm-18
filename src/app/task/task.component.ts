@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { Task } from '../../models/task.class';
 import { TaskDialogComponent } from '../tasks/task-dialog/task-dialog.component';
 import { FirebaseService } from '../services/firebase.service';
+import { TaskStateService } from '../services/task-state.service';
 
 @Component({
   selector: 'app-tasks',
@@ -31,13 +32,14 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class TasksComponent implements OnInit {
   task = new Task();
-  // Erstellen eines Signals für die Task-Liste
-  allTasks = signal<Task[]>([]);
+  allTasks = inject(TaskStateService).tasks;
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[1]);
   readonly dialog = inject(MatDialog);
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private firebaseService: FirebaseService,
+    private taskStateService: TaskStateService
+  ) {}
 
   ngOnInit(): void {
     this.firebaseService.getTasks().subscribe((changes: any) => {
@@ -58,8 +60,7 @@ export class TasksComponent implements OnInit {
         }
         return u;
       });
-      // Aktualisieren des Signals
-      this.allTasks.set(tasks);
+      this.taskStateService.setTasks(tasks);
     });
   }
 
