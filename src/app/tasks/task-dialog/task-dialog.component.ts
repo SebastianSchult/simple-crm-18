@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { provideNativeDateAdapter } from '@angular/material/core'; 
-import { FirebaseService } from './../../services/firebase.service'; // Füge den Service hinzu
+import { FirebaseService } from './../../services/firebase.service'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { GermanDateAdapter } from '../../shared/german-date-adapter';

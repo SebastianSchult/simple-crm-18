@@ -125,7 +125,6 @@ export class FirebaseService {
     const taskDocRef = doc(this.firestore, 'tasks', taskId);
     const taskSnap = await getDoc(taskDocRef);
     if (taskSnap.exists()) {
-     
       return new Task({ id: taskSnap.id, ...taskSnap.data() });
     } else {
       throw new Error('No such task!');
@@ -141,5 +140,10 @@ export class FirebaseService {
   deleteTask(taskId: string): Promise<void> {
     const taskDocRef = doc(this.firestore, 'tasks', taskId);
     return deleteDoc(taskDocRef);
+  }
+
+  updateTask(taskId: string, updatedData: any): Promise<void> {
+    const taskDocRef = doc(this.firestore, 'tasks', taskId);
+    return updateDoc(taskDocRef, updatedData);
   }
 } 

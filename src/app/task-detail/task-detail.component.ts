@@ -59,8 +59,14 @@ export class TaskDetailComponent implements OnInit {
       data: { task: taskCopy }
     });
     dialogRef.afterClosed().subscribe((result: Task | undefined) => {
-      if (result) {
-        this.task = result;
+      if (result && result.id) {
+        this.firebaseService.updateTask(result.id, result.toJSON())
+          .then(() => {
+            this.task = result;
+          })
+          .catch((error: any) => {
+            console.error('Fehler beim Aktualisieren des Tasks:', error);
+          });
       }
     });
   }

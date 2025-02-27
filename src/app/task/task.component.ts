@@ -41,12 +41,19 @@ export class TasksComponent implements OnInit {
   ngOnInit(): void {
     this.firebaseService.getTasks().subscribe((changes: any) => {
       this.allTasks = changes.map((u: any) => {
-        if (
-          u.dueDate &&
-          typeof u.dueDate === 'object' &&
-          'seconds' in u.dueDate
-        ) {
-          u.dueDate = new Date(u.dueDate.seconds * 1000);
+        if (u.dueDate) {
+          if (typeof u.dueDate.toDate === 'function') {
+            u.dueDate = u.dueDate.toDate();
+          } else if ('seconds' in u.dueDate) {
+            u.dueDate = new Date(u.dueDate.seconds * 1000);
+          }
+        }
+        if (u.createdAt) {
+          if (typeof u.createdAt.toDate === 'function') {
+            u.createdAt = u.createdAt.toDate();
+          } else if ('seconds' in u.createdAt) {
+            u.createdAt = new Date(u.createdAt.seconds * 1000);
+          }
         }
         return u;
       });
