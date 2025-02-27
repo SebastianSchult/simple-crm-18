@@ -93,12 +93,16 @@ export class FirebaseService {
    */
 
   addTask(task: any): Promise<DocumentReference> {
+    if (!task.createdAt) {
+      task.createdAt = new Date();
+    }
     const tasksCollection = collection(this.firestore, 'tasks');
     return addDoc(tasksCollection, task)
       .then((docRef) => {
         return docRef;
       })
       .catch((error) => {
+        console.error('Error saving task:', error);
         throw error;
       });
   }
