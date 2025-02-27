@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
@@ -32,7 +32,7 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class UserComponent implements OnInit {
   user = new User();
-  allUsers: any[] = [];
+  allUsers = signal<User[]>([]);
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[1]);
   readonly dialog = inject(MatDialog);
@@ -41,12 +41,13 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.firebaseService.getUsers().subscribe((changes: any) => {
-      this.allUsers = changes.map((u: any) => {
+      const users = changes.map((u: any) => {
         if (u.birthDate && typeof u.birthDate === 'object' && 'seconds' in u.birthDate) {
           u.birthDate = new Date(u.birthDate.seconds * 1000);
         }
         return u;
       });
+      this.allUsers.set(users);
     });
   }
 

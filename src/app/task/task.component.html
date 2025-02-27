@@ -5,14 +5,14 @@
         <tr>
           <th>Title</th>
           <th>Description</th>
-          <th>dueDate</th>
-          <th>status</th>
-          <th>created at</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Created At</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let task of allTasks" [routerLink]="'/task/' + task.id">
-          <td>{{ task.title }} {{ task.lastName }}</td>
+        <tr *ngFor="let task of allTasks()" [routerLink]="'/task/' + task.id">
+          <td>{{ task.title }}</td>
           <td>{{ task.description }}</td>
           <td>{{ task.dueDate | date:'dd.MM.yyyy' }}</td>
           <td>{{ task.status }}</td>
@@ -29,7 +29,7 @@
   mat-fab
   color="primary"
   #tooltip="matTooltip"
-  matTooltip="add Task"
+  matTooltip="Add Task"
   [matTooltipPosition]="position.value!"
   matTooltipHideDelay="1000"
 >

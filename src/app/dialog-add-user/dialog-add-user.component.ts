@@ -77,15 +77,14 @@ export class DialogAddUserComponent {
   loading = false;
 
   
+  
   /**
-   * Speichert den neuen User in Firestore.
-   * Wenn der User nicht valid ist, passiert nichts.
-   * Wenn der User valid ist, wird er in Firestore gespeichert und der user-id wird geloggt.
-   * Wenn der Speichervorgang erfolgreich war, wird eine Erfolgsmeldung geloggt,
-   * das User-Objekt wird resettet, der Dialog wird mit dem neuen User als Ergebnis
-   * geschlossen und eine Snackbar mit einer Erfolgsmeldung wird angezeigt.
-   * Wenn der Speichervorgang fehlschlug, wird eine Fehlermeldung geloggt und nichts
-   * weiter passiert.
+   * Saves the user to the Firestore.
+   * If the user is not valid, it doesn't do anything.
+   * If the user is valid, it updates the user in the Firestore and logs the user-id.
+   * If the update is successful, it logs a success message, resets the user object,
+   * closes the dialog with the updated user as the result, and shows a snackbar with
+   * a success message. If the update fails, it logs an error message and does nothing.
    */
   saveUser() {
     if (this.loading) return;

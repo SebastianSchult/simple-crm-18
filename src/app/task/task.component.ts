@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Task } from '../../models/task.class';
 import { TaskDialogComponent } from '../tasks/task-dialog/task-dialog.component';
-import { FirebaseService } from '../services/firebase.service'; 
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-tasks',
@@ -31,7 +31,8 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class TasksComponent implements OnInit {
   task = new Task();
-  allTasks: any[] = [];
+  // Erstellen eines Signals für die Task-Liste
+  allTasks = signal<Task[]>([]);
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[1]);
   readonly dialog = inject(MatDialog);
@@ -40,7 +41,7 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.firebaseService.getTasks().subscribe((changes: any) => {
-      this.allTasks = changes.map((u: any) => {
+      const tasks = changes.map((u: any) => {
         if (u.dueDate) {
           if (typeof u.dueDate.toDate === 'function') {
             u.dueDate = u.dueDate.toDate();
@@ -57,6 +58,8 @@ export class TasksComponent implements OnInit {
         }
         return u;
       });
+      // Aktualisieren des Signals
+      this.allTasks.set(tasks);
     });
   }
 
@@ -65,6 +68,6 @@ export class TasksComponent implements OnInit {
   }
 
   saveTask(task: Task): void {
-    this.firebaseService.addTask(task)
+    this.firebaseService.addTask(task);
   }
 }
