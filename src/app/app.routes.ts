@@ -8,6 +8,7 @@ import { ImpressumComponent } from './impressum/impressum.component';
 import { TermsOfUseComponent } from './terms-of-use/terms-of-use.component';
 import { TasksComponent } from './task/task.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
+import { TaskResolver } from './services/task-resolver/task-resolver.service';
 
 export const routes: Routes = [
   // Unauthentifizierte Benutzer sehen standardmäßig den Auth-Bereich.
@@ -20,7 +21,7 @@ export const routes: Routes = [
   { path: 'user', component: UserComponent, canActivate: [AuthGuard] },
   { path: 'user/:id', component: UserDetailComponent, canActivate: [AuthGuard] },
   { path: 'task', component: TasksComponent, canActivate: [AuthGuard]},
-  { path: 'task/:id', component: TaskDetailComponent, canActivate: [AuthGuard]},
+  { path: 'task/:id', component: TaskDetailComponent, resolve: { task: TaskResolver }, canActivate: [AuthGuard]},
   // Fallback: Unbekannte Routen leiten zurück zur Auth-Seite.
   { path: '**', redirectTo: '/auth' }
 ];

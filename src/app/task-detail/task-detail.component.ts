@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../models/task.class';
 import { MatDialog } from '@angular/material/dialog';
-import { DateAdapter, NativeDateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 import { DialogEditTaskComponent } from '../dialog-edit-task/dialog-edit-task.component'; 
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TaskStateService } from '../services/task-state.service';
@@ -19,10 +18,6 @@ import { TaskStateService } from '../services/task-state.service';
   imports: [CommonModule, MatCardModule, MatIconModule, MatMenuModule, MatButtonModule, MatSnackBarModule],
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss'],
-  providers: [
-    { provide: DateAdapter, useClass: NativeDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS }
-  ]
 })
 export class TaskDetailComponent implements OnInit {
   task: Task | null = null;
@@ -34,68 +29,52 @@ export class TaskDetailComponent implements OnInit {
   private taskStateService = inject(TaskStateService);
 
   ngOnInit(): void {
-    const taskId = this.route.snapshot.paramMap.get('id');
-    if (taskId) {
-      // Zuerst im globalen Signal nachsehen:
-      const tasks = this.taskStateService.tasks();
-      const foundTask = tasks.find(t => t.id === taskId);
-      if (foundTask) {
-        this.task = foundTask;
+    this.route.data.subscribe((data) => {
+      if (data['task']) {
+        this.task = data['task'];
       } else {
-        // Falls nicht vorhanden, über Firebase abrufen und den globalen Zustand aktualisieren.
-        this.firebaseService.getTaskById(taskId)
-          .then((data: Task) => {
-            // Konvertieren Sie Firestore-Timestamps in Date, falls nötig:
-            if (data.dueDate && typeof (data.dueDate as any).toDate === 'function') {
-              data.dueDate = (data.dueDate as any).toDate();
-            }
-            if (data.createdAt && typeof (data.createdAt as any).toDate === 'function') {
-              data.createdAt = (data.createdAt as any).toDate();
-            }
-            const taskInstance = new Task(data);
-            this.task = taskInstance;
-            // Optional: Globalen Zustand aktualisieren
-            this.taskStateService.updateTask(taskInstance);
-          })
-          .catch((error: any) => {
-            console.error('Error fetching task details:', error);
-          });
+        console.error('Fehler: Task-Daten nicht gefunden.');
+        this.task = null; // Fallback für Sicherheit
       }
-    }
+    });
   }
 
   editTask(): void {
     if (!this.task) return;
     const taskCopy = new Task({ ...this.task });
+
     const dialogRef = this.dialog.open(DialogEditTaskComponent, {
       data: { task: taskCopy }
     });
+
     dialogRef.afterClosed().subscribe((result: Task | undefined) => {
       if (result && result.id) {
         this.firebaseService.updateTask(result.id, result.toJSON())
           .then(() => {
             this.task = result;
             this.taskStateService.updateTask(result);
-            this.openSnackBar('Task updated');
+            this.openSnackBar('Task aktualisiert');
           })
           .catch((error: any) => {
-            console.error('Error updating task:', error);
+            console.error('Fehler beim Aktualisieren des Tasks:', error);
           });
       }
     });
   }
 
   deleteTask(): void {
-    const taskId = this.task?.id;
-    if (!taskId) {
+    if (!this.task || !this.task.id) { // Sicherheit gegen 'null' oder 'undefined'
       console.error('Keine gültige Task-ID gefunden');
       return;
     }
+
+    const taskId: string = this.task.id; // Erzwingt Typensicherheit
+
     if (!confirm('Möchten Sie diesen Task wirklich löschen?')) return;
-  
+
     this.firebaseService.deleteTask(taskId)
       .then(() => {
-        this.openSnackBar('Task deleted');
+        this.openSnackBar('Task gelöscht');
         this.taskStateService.deleteTask(taskId);
         this.router.navigate(['/tasks']);
       })
@@ -105,6 +84,6 @@ export class TaskDetailComponent implements OnInit {
   }
 
   openSnackBar(message: string): void {
-    this._snackBar.open(message, 'Close', { duration: 3000 });
+    this._snackBar.open(message, 'Schließen', { duration: 3000 });
   }
 }

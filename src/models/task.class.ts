@@ -20,7 +20,6 @@ export class Task {
 
     this.status = obj?.status || 'to Do';
 
-    // Analog für createdAt
     if (obj?.createdAt && typeof (obj.createdAt as any).toDate === 'function') {
       this.createdAt = (obj.createdAt as any).toDate();
     } else {
