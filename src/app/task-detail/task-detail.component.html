@@ -1,8 +1,22 @@
-<mat-card *ngIf="task">
-    <mat-card-title>Task Details</mat-card-title>
+<mat-card class="task-detail-header" appearance="outlined" *ngIf="task">
+    <button mat-icon-button class="pin-upper-right-corner" [matMenuTriggerFor]="taskMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #taskMenu="matMenu">
+      <button mat-menu-item (click)="editTask()">Edit</button>
+      <button mat-menu-item (click)="deleteTask()">Delete</button>
+    </mat-menu>
+    <div class="task-details">
+      <h2>{{ task.title }}</h2>
+      <p>{{ task.description }}</p>
+    </div>
+  </mat-card>
+  
+  <mat-card class="mt-32" *ngIf="task">
+    <mat-card-header>
+      <mat-card-title>Task Information</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
-      <p><strong>Title:</strong> {{ task.title }}</p>
-      <p><strong>Description:</strong> {{ task.description }}</p>
       <p><strong>Due Date:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
       <p><strong>Status:</strong> {{ task.status }}</p>
       <p><strong>Created At:</strong> {{ task.createdAt | date:'dd.MM.yyyy' }}</p>

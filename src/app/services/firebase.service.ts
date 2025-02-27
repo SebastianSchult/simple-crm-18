@@ -11,6 +11,8 @@ export class FirebaseService {
 
   constructor(private firestore: Firestore) { }
 
+
+  
   /**
    * Retrieves a list of users from the Firestore 'users' collection.
    * Each user document includes an auto-generated 'id' field.
@@ -123,9 +125,21 @@ export class FirebaseService {
     const taskDocRef = doc(this.firestore, 'tasks', taskId);
     const taskSnap = await getDoc(taskDocRef);
     if (taskSnap.exists()) {
-      return taskSnap.data() as Task;
+     
+      return new Task({ id: taskSnap.id, ...taskSnap.data() });
     } else {
       throw new Error('No such task!');
     }
+  }
+
+  /**
+   * Deletes a task document from the Firestore 'tasks' collection by its ID.
+   * 
+   * @param taskId The ID of the task document to delete.
+   * @returns A promise that resolves when the delete operation is complete.
+   */
+  deleteTask(taskId: string): Promise<void> {
+    const taskDocRef = doc(this.firestore, 'tasks', taskId);
+    return deleteDoc(taskDocRef);
   }
 } 
