@@ -10,10 +10,11 @@ import { Task } from '../../models/task.class';
 import { MatDialog } from '@angular/material/dialog';
 import { DateAdapter, NativeDateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS } from '@angular/material/core';
 import { DialogEditTaskComponent } from '../dialog-edit-task/dialog-edit-task.component'; 
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, MatMenuModule, MatButtonModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatMenuModule, MatButtonModule, MatSnackBarModule],
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss'],
   providers: [
@@ -27,6 +28,7 @@ export class TaskDetailComponent implements OnInit {
   private firebaseService = inject(FirebaseService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private _snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('id');
@@ -63,6 +65,7 @@ export class TaskDetailComponent implements OnInit {
         this.firebaseService.updateTask(result.id, result.toJSON())
           .then(() => {
             this.task = result;
+            this.openSnackBar('Task updated');
           })
           .catch((error: any) => {
             console.error('Fehler beim Aktualisieren des Tasks:', error);
@@ -85,11 +88,16 @@ deleteTask(): void {
   if (!confirm('Möchten Sie diesen Task wirklich löschen?')) return;
   this.firebaseService.deleteTask(this.task.id)
     .then(() => {
-      this.router.navigate(['/tasks']);
+      this.openSnackBar('Task updated');
+      this.router.navigate(['/task']);
     })
     .catch((error: any) => {
       console.error('Fehler beim Löschen des Tasks:', error);
     });
+}
+
+openSnackBar(message: string): void {
+  this._snackBar.open(message, 'Close', { duration: 3000 });
 }
 
 }

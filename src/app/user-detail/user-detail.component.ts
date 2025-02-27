@@ -116,7 +116,6 @@ export class UserDetailComponent {
    * from the Firestore and navigates to the user-list page.
    */
   delete() {
-    // Optional: Bestätigung einholen
     if (!confirm('Möchten Sie diesen User wirklich löschen?')) {
       return;
     }
